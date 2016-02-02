@@ -6,7 +6,14 @@
         <title>Facelet Title</title>
     </h:head>
     <h:body>
-		Hello from Facelets
+		<h:form>
+			<p><h:inputText value="#{myView.loginForm.firstName}" required="true"/></p>
+			<p><h:inputText value="#{myView.loginForm.lastName}" required="true"/></p>
+			<p><h:inputText value="#{myView.loginForm.email}" required="true"/></p>
+			<p><h:inputText value="#{myView.loginForm.username}" required="true"/></p>
+			<p><h:inputText value="#{myView.loginForm.password}" required="true"/></p>
+			<p><h:commandButton value="Register" action="#{myView.register()}" /></p>
+ 		</h:form>
     </h:body>
 </html>
 
