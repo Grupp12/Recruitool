@@ -3,17 +3,41 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html">
     <h:head>
-        <title>Facelet Title</title>
+        <title>Recruitool</title>
+		<link rel="stylesheet" type="text/css" href="webstyle.css" />
     </h:head>
+	
     <h:body>
-		<h:form>
-			<p><h:inputText value="#{myView.loginForm.firstName}" required="true"/></p>
-			<p><h:inputText value="#{myView.loginForm.lastName}" required="true"/></p>
-			<p><h:inputText value="#{myView.loginForm.email}" required="true"/></p>
-			<p><h:inputText value="#{myView.loginForm.username}" required="true"/></p>
-			<p><h:inputText value="#{myView.loginForm.password}" required="true"/></p>
-			<p><h:commandButton value="Register" action="#{myView.register()}" /></p>
- 		</h:form>
+		<div id="loginForm">
+			<div class="header">
+				Register
+			</div>
+			<h:form>
+				<p class="loginInput">
+					<p style="margin: 0">First Name</p>
+					<h:inputText value="#{myView.loginForm.firstName}" required="true"/>
+				</p>
+				<p class="loginInput">
+					<p style="margin: 0">Last Name</p>
+					<h:inputText value="#{myView.loginForm.lastName}" required="true"/>
+				</p>
+				<p class="loginInput">
+					<p style="margin: 0">E-Mail</p>
+					<h:inputText value="#{myView.loginForm.email}" required="true"/>
+				</p>
+				<p class="loginInput">
+					<p style="margin: 0">Username</p>
+					<h:inputText value="#{myView.loginForm.username}" required="true"/>
+				</p>
+				<p class="loginInput">
+					<p style="margin: 0">Password</p>
+					<h:inputSecret value="#{myView.loginForm.password}" required="true"/>
+				</p>
+				<p>
+					<h:commandButton value="Register" action="#{myView.register()}" />
+				</p>
+			</h:form>
+		</div>
     </h:body>
 </html>
 

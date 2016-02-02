@@ -1,0 +1,31 @@
+* {
+	font-family: Courier New;
+}
+
+body {
+    background: #22C8E5; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(left, #22C8E5, #0D505B); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(right, #22C8E5, #0D505B); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(right, #22C8E5, #0D505B); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(to right, #22C8E5, #0D505B); /* Standard syntax */
+}
+
+#loginForm {
+	margin: 50px auto;
+	width: 20%;
+	text-align: center;
+	display: block;
+	padding: 10px;
+	border-radius: 10px;
+	box-shadow: 10px 10px 10px #0D505B;
+	background-color: white;
+}
+div.header {
+	background-color: #BC252A;
+	color: white;
+	display: block;
+	margin: -10px;
+	margin-bottom: 5px;
+	padding: 10px;
+	border-radius: 10px 10px 0 0
+}

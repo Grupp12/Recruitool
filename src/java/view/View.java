@@ -12,7 +12,7 @@ public class View implements Serializable {
 	@EJB
 	private Controller controller;
 	
-	private final LoginForm loginForm = new LoginForm();
+	private LoginForm loginForm = new LoginForm();
 	
 	public LoginForm getLoginForm() {
 		return loginForm;
@@ -22,6 +22,7 @@ public class View implements Serializable {
 		try {
 			controller.register(loginForm.getFirstName(), loginForm.getLastName(),
 					loginForm.getEmail(), loginForm.getUsername(), loginForm.getPassword());
+			loginForm = new LoginForm();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
