@@ -36,6 +36,8 @@
 				<p>
 					<h:commandButton value="Register" action="#{myView.register()}" />
 				</p>
+				<h:outputLabel for="registerError" value="Error: " rendered="#{myView.formError != null}"/>
+				<h:outputText id="registerError" value="#{myView.formError}"/>
 			</h:form>
 		</div>
     </h:body>

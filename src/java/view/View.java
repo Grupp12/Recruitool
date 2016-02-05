@@ -5,6 +5,7 @@ import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import javax.ejb.EJB;
+import util.Log;
 
 @Named("myView")
 @SessionScoped
@@ -12,19 +13,30 @@ public class View implements Serializable {
 	@EJB
 	private Controller controller;
 	
-	private LoginForm loginForm = new LoginForm();
+	private RegisterForm registerForm = new RegisterForm();
 	
-	public LoginForm getLoginForm() {
-		return loginForm;
+	private String formMessage;
+	
+	public RegisterForm getLoginForm() {
+		return registerForm;
 	}
 	
+	@Log
 	public void register() {
+		formMessage = null;
 		try {
-			controller.register(loginForm.getFirstName(), loginForm.getLastName(),
-					loginForm.getEmail(), loginForm.getUsername(), loginForm.getPassword());
-			loginForm = new LoginForm();
+			controller.register(registerForm);
+			
+			// Reset the form
+			registerForm = new RegisterForm();
+			
+			formMessage = "Your account has been created!";
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			formMessage = ex.getMessage();
 		}
+	}
+	
+	public String getFormMessage() {
+		return formMessage;
 	}
 }
