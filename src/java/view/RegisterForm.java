@@ -1,16 +1,37 @@
 package view;
 
-public class LoginForm {
+public final class RegisterForm implements RegisterFormDTO {
 	private String firstName;
 	private String lastName;
 	private String email;
 	private String username;
 	private String password;
 
+	@Override
 	public String getFirstName() {
 		return firstName;
 	}
 
+	@Override
+	public String getLastName() {
+		return lastName;
+	}
+
+	@Override
+	public String getEmail() {
+		return email;
+	}
+
+	@Override
+	public String getUsername() {
+		return username;
+	}
+
+	@Override
+	public String getPassword() {
+		return password;
+	}
+	
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
@@ -29,21 +50,5 @@ public class LoginForm {
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public String getPassword() {
-		return password;
 	}
 }
