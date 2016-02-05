@@ -5,7 +5,6 @@ import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import javax.ejb.EJB;
-import util.Log;
 
 @Named("myView")
 @SessionScoped
@@ -21,7 +20,6 @@ public class View implements Serializable {
 		return registerForm;
 	}
 	
-	@Log
 	public void register() {
 		formMessage = null;
 		try {
