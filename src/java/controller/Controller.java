@@ -1,13 +1,13 @@
 package controller;
 
-import javax.ejb.Stateless;
+import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.validation.ValidationException;
 import model.Account;
 import view.RegisterFormDTO;
 
-@Stateless
+@Stateful
 public class Controller {
 	@PersistenceContext(unitName = "RecruitoolPU")
 	EntityManager em;
