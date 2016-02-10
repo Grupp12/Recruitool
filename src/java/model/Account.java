@@ -2,7 +2,10 @@ package model;
 
 import java.io.Serializable;
 import java.util.Set;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -12,33 +15,35 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import static model.Role.APPLICANT;
-import org.hibernate.validator.constraints.Email;
 
 @Entity
 public class Account implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@Id
 	@NotNull
-	@Size(min = 1)
-	private String username;
-	@NotNull
-	@Size(min = 1)
-	private String password;
-
-	@NotNull
-	@Size(min = 1)
+	@Size(min = 1, message = "First Name can not be empty")
 	private String firstName;
 	@NotNull
-	@Size(min = 1)
+	@Size(min = 1, message = "Last Name can not be empty")
 	private String lastName;
 
 	@NotNull
-	@Size(min = 1)
-	@Pattern(regexp = "[\\w\\.-]*[a-zA-Z0-9_]@[\\w\\.-]*[a-zA-Z0-9]\\.[a-zA-Z][a-zA-Z\\.]*[a-zA-Z]")
+	@Size(min = 1, message = "E-Mail can not be empty")
+	@Pattern(regexp = "[\\w\\.-]*[a-zA-Z0-9_]@[\\w\\.-]*[a-zA-Z0-9]\\.[a-zA-Z][a-zA-Z\\.]*[a-zA-Z]",
+			message = "E-Mail is not valid")
 	private String email;
 
+	@Id
+	@NotNull
+	@Size(min = 1, message = "Username can not be empty")
+	private String username;
+	@NotNull
+	@Size(min = 1, message = "Password can not be empty")
+	private String password;
+	
+	@Column(name = "ACC_ROLE")
+	@Enumerated(EnumType.STRING)
 	private Role role;
 
 	protected Account() {
