@@ -51,3 +51,5 @@ Temporary Items
 /nbproject/private/
 /nbproject/project.properties
 nbproject/project.properties
+nbproject/build-impl.xml
+nbproject/project.xml
