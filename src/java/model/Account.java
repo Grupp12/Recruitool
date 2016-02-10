@@ -25,7 +25,8 @@ public class Account implements Serializable {
 
 	@NotNull
 	@Size(min = 1, message = "E-Mail can not be empty")
-	@Pattern(regexp = "[\\w\\.-]*[a-zA-Z0-9_]@[\\w\\.-]*[a-zA-Z0-9]\\.[a-zA-Z][a-zA-Z\\.]*[a-zA-Z]")
+	@Pattern(regexp = "[\\w\\.-]*[a-zA-Z0-9_]@[\\w\\.-]*[a-zA-Z0-9]\\.[a-zA-Z][a-zA-Z\\.]*[a-zA-Z]",
+			message = "E-Mail is not valid")
 	private String email;
 
 	@Id
