@@ -54,6 +54,10 @@ public class Account implements Serializable {
 	public String getFirstName() {
 		return firstName;
 	}
+        
+	public String getUsername() {
+		return username;
+	}
 
 	@Override
 	public int hashCode() {
