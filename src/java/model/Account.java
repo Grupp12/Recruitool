@@ -1,8 +1,13 @@
 package model;
 
 import java.io.Serializable;
+import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -49,6 +54,8 @@ public class Account implements Serializable {
 		this.password = password;
 
 		this.role = APPLICANT;
+		
+		
 	}
 
 	public String getFirstName() {
@@ -81,4 +88,15 @@ public class Account implements Serializable {
 	public String toString() {
 		return String.format("model.User[ firstName=%s, lastName=%s ]", firstName, lastName);
 	}
+	
+	private void validate() {
+		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+		Validator validator = factory.getValidator();
+		
+		Set<ConstraintViolation<Account>> constraintViolations = validator.validate( this );
+		
+		
+		
+	}
+	
 }
