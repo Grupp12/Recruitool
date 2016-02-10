@@ -20,7 +20,7 @@ public class Controller {
 	 *
 	 * @throws EntityExistsException if account already exists.
 	 */
-	public void register(RegisterFormDTO registerForm) throws EntityExistsException {
+	public void register(RegisterFormDTO registerForm) throws ValidationException, EntityExistsException {
 		Account acc = new Account(
 				registerForm.getFirstName(),
 				registerForm.getLastName(),

@@ -37,7 +37,7 @@
 					<h:commandButton value="Register" action="#{myView.register()}" />
 				</p>
 				<h:outputLabel for="registerMessage" rendered="#{myView.formMessage != null}"/>
-				<h:outputText id="registerMessage" value="#{myView.formMessage}"/>
+				<h:outputText id="registerMessage" value="#{myView.formMessage}" style="white-space: pre-wrap"/>
 			</h:form>
 		</div>
     </h:body>
