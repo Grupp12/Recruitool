@@ -4,7 +4,6 @@ import integration.AccountDao;
 import integration.EntityExistsException;
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
-import javax.validation.ValidationException;
 import model.Account;
 import view.RegisterFormDTO;
 
