@@ -14,32 +14,31 @@
 			</div>
 			<h:form>
 				<p class="loginInput">
-					<p style="margin: 0">First Name</p>
-					<h:inputText value="#{myView.loginForm.firstName}" required="true"/>
+					<p>First Name</p>
+					<h:inputText value="#{myView.loginForm.firstName}"/>
 				</p>
 				<p class="loginInput">
-					<p style="margin: 0">Last Name</p>
-					<h:inputText value="#{myView.loginForm.lastName}" required="true"/>
+					<p>Last Name</p>
+					<h:inputText value="#{myView.loginForm.lastName}"/>
 				</p>
 				<p class="loginInput">
-					<p style="margin: 0">E-Mail</p>
-					<h:inputText value="#{myView.loginForm.email}" required="true"/>
+					<p>E-Mail</p>
+					<h:inputText value="#{myView.loginForm.email}"/>
 				</p>
 				<p class="loginInput">
-					<p style="margin: 0">Username</p>
-					<h:inputText value="#{myView.loginForm.username}" required="true"/>
+					<p>Username</p>
+					<h:inputText value="#{myView.loginForm.username}"/>
 				</p>
 				<p class="loginInput">
-					<p style="margin: 0">Password</p>
-					<h:inputSecret value="#{myView.loginForm.password}" required="true"/>
+					<p>Password</p>
+					<h:inputSecret value="#{myView.loginForm.password}"/>
 				</p>
 				<p>
 					<h:commandButton value="Register" action="#{myView.register()}" />
 				</p>
-				<h:outputLabel for="registerError" rendered="#{myView.formMessage != null}"/>
-				<h:outputText id="registerError" value="#{myView.formMessage}"/>
+				<h:outputLabel for="registerMessage" rendered="#{myView.formMessage != null}"/>
+				<h:outputText id="registerMessage" value="#{myView.formMessage}"/>
 			</h:form>
 		</div>
     </h:body>
 </html>
-

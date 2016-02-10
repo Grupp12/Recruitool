@@ -20,6 +20,11 @@ body {
 	box-shadow: 10px 10px 10px #0D505B;
 	background-color: white;
 }
+
+.loginInput + p {
+	margin: 0;
+}
+
 div.header {
 	background-color: #BC252A;
 	color: white;
