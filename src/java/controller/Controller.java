@@ -17,7 +17,8 @@ public class Controller {
 	 * Registers a new {@code Account}.
 	 *
 	 * @param registerForm the new account info.
-	 *
+	 * 
+	 * @throws controller.ValidationException
 	 * @throws EntityExistsException if account already exists.
 	 */
 	public void register(RegisterFormDTO registerForm) throws ValidationException, EntityExistsException {
