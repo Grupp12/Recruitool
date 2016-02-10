@@ -1,5 +1,6 @@
 package model;
 
+import controller.ValidationException;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Column;
@@ -59,8 +60,6 @@ public class Account implements Serializable {
 		this.password = password;
 
 		this.role = APPLICANT;
-		
-		
 	}
 
 	public String getFirstName() {
@@ -94,13 +93,18 @@ public class Account implements Serializable {
 		return String.format("model.User[ firstName=%s, lastName=%s ]", firstName, lastName);
 	}
 	
-	private void validate() {
+	public void validate() throws ValidationException {
 		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 		Validator validator = factory.getValidator();
 		
 		Set<ConstraintViolation<Account>> constraintViolations = validator.validate( this );
-		
-		
+		if (!constraintViolations.isEmpty()) {
+			StringBuilder violationsStr = new StringBuilder();
+			for (ConstraintViolation<?> violation : constraintViolations) {
+				violationsStr.append(violation.getMessage()).append('\n');
+			}
+			throw new ValidationException(violationsStr.toString());
+		}
 		
 	}
 	
