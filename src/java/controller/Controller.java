@@ -10,7 +10,6 @@ import model.Account;
 import view.RegisterFormDTO;
 
 @Stateful
-@SessionScoped
 public class Controller {
 
 	@EJB
