@@ -14,7 +14,6 @@ import javax.validation.ValidatorFactory;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import static model.Role.APPLICANT;
 
 @Entity
 public class Account implements Serializable {
@@ -58,7 +57,7 @@ public class Account implements Serializable {
 		this.username = username;
 		this.password = password;
 
-		this.role = APPLICANT;
+		this.role = Role.APPLICANT;
 		
 		
 	}
