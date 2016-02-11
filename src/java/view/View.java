@@ -38,7 +38,7 @@ public class View implements Serializable {
 			
 			formMessage = "Your account has been created!";
 		} catch (Exception ex) {
-			formMessage = "Error: " + ex.getMessage();
+			formMessage = ex.getMessage();
 		}
 	}
 	
