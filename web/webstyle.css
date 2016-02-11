@@ -25,6 +25,10 @@ body {
 	margin: 0;
 }
 
+.inputError {
+	color: red;
+}
+
 div.header {
 	background-color: #BC252A;
 	color: white;
