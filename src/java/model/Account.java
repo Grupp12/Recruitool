@@ -40,6 +40,7 @@ public class Account implements Serializable {
 	private String username;
 	@NotNull
 	@Size(min = 1, message = "Password can not be empty")
+	@Column(length = 261) // Hash is always 261 chars long
 	private String password;
 	
 	@Column(name = "ACC_ROLE")
@@ -68,7 +69,11 @@ public class Account implements Serializable {
 	public String getUsername() {
 		return username;
 	}
-
+	
+	public String getPassword() {
+		return password;
+	}
+	
 	@Override
 	public int hashCode() {
 		int hash = 0;
