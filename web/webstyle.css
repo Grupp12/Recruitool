@@ -25,8 +25,9 @@ body {
 	margin: 0;
 }
 
-.inputError {
+.inputError > * {
 	color: red;
+	text-align: left;
 }
 
 div.header {

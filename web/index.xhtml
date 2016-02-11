@@ -16,27 +16,27 @@
 				<p class="loginInput">
 					<p>First Name</p>
 					<h:inputText id="firstName" value="#{myView.registerForm.firstName}"/>
-					<p class="inputError"><h:message for="firstName" /></p>
+					<p><h:messages class="inputError" for="firstName" /></p>
 				</p>
 				<p class="loginInput">
 					<p>Last Name</p>
 					<h:inputText id="lastName" value="#{myView.registerForm.lastName}"/>
-					<p class="inputError"><h:message for="lastName" /></p>
+					<p><h:messages class="inputError" for="lastName" /></p>
 				</p>
 				<p class="loginInput">
 					<p>E-Mail</p>
 					<h:inputText id="email" value="#{myView.registerForm.email}"/>
-					<p class="inputError"><h:message for="email" /></p>
+					<p><h:messages class="inputError" for="email" /></p>
 				</p>
 				<p class="loginInput">
 					<p>Username</p>
 					<h:inputText id="username" value="#{myView.registerForm.username}"/>
-					<p class="inputError"><h:message for="username" /></p>
+					<p><h:messages class="inputError" for="username" /></p>
 				</p>
 				<p class="loginInput">
 					<p>Password</p>
 					<h:inputSecret id="password" value="#{myView.registerForm.password}"/>
-					<p class="inputError"><h:message for="password" /></p>
+					<p><h:messages class="inputError" for="password" /></p>
 				</p>
 				<p>
 					<h:commandButton value="Register" action="#{myView.register()}" />
