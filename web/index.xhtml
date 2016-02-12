@@ -1,49 +1,41 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+	  xmlns:components="http://java.sun.com/jsf/composite/components"
+	  xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+	  xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 	<h:head>
 		<title>Recruitool</title>
 		<link rel="stylesheet" type="text/css" href="webstyle.css" />
 	</h:head>
 	
 	<h:body>
+		<ui:include src="/resources/templates/header.xhtml"/>
 		<div id="loginForm">
 			<div class="header">
 				Register
 			</div>
-			<h:form>
-				<p class="loginInput">
-					<p>First Name</p>
-					<h:inputText id="firstName" value="#{myView.registerForm.firstName}"/>
-					<p><h:messages class="inputError" for="firstName" /></p>
-				</p>
-				<p class="loginInput">
-					<p>Last Name</p>
-					<h:inputText id="lastName" value="#{myView.registerForm.lastName}"/>
-					<p><h:messages class="inputError" for="lastName" /></p>
-				</p>
-				<p class="loginInput">
-					<p>E-Mail</p>
-					<h:inputText id="email" value="#{myView.registerForm.email}"/>
-					<p><h:messages class="inputError" for="email" /></p>
-				</p>
-				<p class="loginInput">
-					<p>Username</p>
-					<h:inputText id="username" value="#{myView.registerForm.username}"/>
-					<p><h:messages class="inputError" for="username" /></p>
-				</p>
-				<p class="loginInput">
-					<p>Password</p>
-					<h:inputSecret id="password" value="#{myView.registerForm.password}"/>
-					<p><h:messages class="inputError" for="password" /></p>
-				</p>
-				<p>
-					<h:commandButton value="Register" action="#{myView.register()}" />
-				</p>
-				<h:outputLabel for="registerMessage" rendered="#{myView.formMessage != null}"/>
-				<h:outputText id="registerMessage" value="#{myView.formMessage}" style="white-space: pre-wrap"/>
-			</h:form>
+			<c:if test="#{myView.getComponent() == 'register'}">
+				<components:registercomp 
+					firstName="#{myView.registerForm.firstName}"
+					lastName="#{myView.registerForm.lastName}"
+					email="#{myView.registerForm.email}"
+					username="#{myView.registerForm.username}"
+					password="#{myView.registerForm.password}"
+
+					registerAction="#{myView.register()}"
+				/>
+			</c:if>
+			<c:if test="#{myView.getComponent() == 'login'}">
+				<components:logincomp 
+					username="#{myView.registerForm.username}"
+					password="#{myView.registerForm.password}"
+
+					loginAction="#{myView.register()}"
+				/>
+			</c:if>
 		</div>
+		<ui:include src="/resources/templates/footer.xhtml"/>
 	</h:body>
 </html>

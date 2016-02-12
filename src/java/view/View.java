@@ -16,6 +16,8 @@ public class View implements Serializable {
 	
 	private String formMessage;
 	
+	private String component = "register";
+	
 	/**
 	 * Returns the object representing the register form.
 	 * 
@@ -23,6 +25,10 @@ public class View implements Serializable {
 	 */
 	public RegisterForm getRegisterForm() {
 		return registerForm;
+	}
+	
+	public String getComponent() {
+		return component;
 	}
 	
 	/**
@@ -37,6 +43,7 @@ public class View implements Serializable {
 			registerForm = new RegisterForm();
 			
 			formMessage = "Your account has been created!";
+			component = "login";
 		} catch (Exception ex) {
 			formMessage = ex.getMessage();
 		}
