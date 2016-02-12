@@ -23,7 +23,7 @@ public class Controller {
 	 * @throws EntityExistsException if account already exists.
 	 */
 	public void register(RegisterFormDTO registerForm) throws ValidationException, EntityExistsException {
-		String hashedPassword = Crypto.generatePasswordHash(registerForm.getPassword());
+		String hashedPassword = Crypto.generateHash(registerForm.getPassword());
 		Account acc = new Account(
 				registerForm.getFirstName(),
 				registerForm.getLastName(),

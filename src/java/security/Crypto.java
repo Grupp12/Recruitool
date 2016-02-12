@@ -17,7 +17,7 @@ public class Crypto {
 	private static final int KEY_LENGTH = 1024;
 	private static final int SALT_LENGTH = 64;
 	
-	public static String generatePasswordHash(String clear) {
+	public static String generateHash(String clear) {
 		try {
 			SecureRandom srnd = SecureRandom.getInstance("SHA1PRNG", "SUN");
 			byte[] salt = new byte[SALT_LENGTH];
@@ -37,9 +37,9 @@ public class Crypto {
 		}
 	}
 	
-	public static boolean validatePassword(String clear, String password) {
+	public static boolean validateHash(String clear, String hashed) {
 		try {
-			String[] parts = password.split(":");
+			String[] parts = hashed.split(":");
 			
 			byte[] salt = Base64.getDecoder().decode(parts[0]);
 			byte[] hash = Base64.getDecoder().decode(parts[1]);
@@ -48,11 +48,18 @@ public class Crypto {
 			SecretKeyFactory keyFact = SecretKeyFactory.getInstance(ALGORITHM);
 			byte[] testHash = keyFact.generateSecret(keySpec).getEncoded();
 			
-			int diff = hash.length ^ testHash.length;
+			/*int diff = hash.length ^ testHash.length;
 			for (int i = 0; i < hash.length && i < testHash.length; i++) {
 				diff |= hash[i] ^ testHash[i];
 			}
-			return diff == 0;
+			return diff == 0;*/
+			if (hash.length != testHash.length)
+				return false;
+			for (int i = 0; i < hash.length; i++) {
+				if (hash[i] != testHash[i])
+					return false;
+			}
+			return true;
 		} catch (Exception ex) {
 			Logger.getLogger(Crypto.class.getName()).log(Level.SEVERE, null, ex);
 			throw new RuntimeException("Ka-Boom!");
