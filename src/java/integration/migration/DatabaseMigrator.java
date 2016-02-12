@@ -5,13 +5,13 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class DatabaseMigration {
+public class DatabaseMigrator {
 	
 	public static void main(String[] args) throws SQLException {
-		DatabaseMigration dbMig = new DatabaseMigration();
+		DatabaseMigrator dbMig = new DatabaseMigrator();
 	}
 	
-	private DatabaseMigration() throws SQLException {
+	private DatabaseMigrator() throws SQLException {
 		try (Connection conn = DriverManager.getConnection("jdbc:derby:memory:mig_db;create=true")) {
 			System.out.println("Source database created!");
 		}
