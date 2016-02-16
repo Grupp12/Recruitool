@@ -16,6 +16,8 @@ public class View implements Serializable {
 	
 	private String formMessage;
 	
+	private String content = "register";
+	
 	/**
 	 * Returns the object representing the register form.
 	 * 
@@ -24,6 +26,11 @@ public class View implements Serializable {
 	public RegisterForm getRegisterForm() {
 		return registerForm;
 	}
+	
+	public String getContent() {
+		return content;
+	}
+	
 	
 	/**
 	 * Registers a new account with the data currently in the register form.
@@ -37,6 +44,7 @@ public class View implements Serializable {
 			registerForm = new RegisterForm();
 			
 			formMessage = "Your account has been created!";
+			content = "login";
 		} catch (Exception ex) {
 			formMessage = ex.getMessage();
 		}
