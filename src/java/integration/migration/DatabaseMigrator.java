@@ -16,40 +16,48 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
+import javax.ejb.Singleton;
+import javax.ejb.Startup;
 
 import security.Crypto;
 
 public class DatabaseMigrator {
 	
-	public static void main(String[] args) throws SQLException, IOException {
-		DatabaseMigrator dbMig = new DatabaseMigrator();
-	}
-	
 	private static final Logger logger = Logger.getLogger(DatabaseMigrator.class.getName());
 	
-	private final Connection oldConn;
-	private final Connection newConn;
+	public static void main(String[] args) throws SQLException, IOException {
+		new DatabaseMigrator();
+	}
+	
+	private Connection oldConn;
+	private Connection newConn;
 	
 	private HashMap<Integer, String> roles;
 	
-	protected DatabaseMigrator() throws SQLException, IOException {
-		oldConn = DriverManager.getConnection("jdbc:derby:memory:mig_db;create=true");
-		parseLegacySqlScript();
-		logger.log(Level.INFO, "Legacy database created!");
-		
-		newConn = DriverManager.getConnection("jdbc:derby://localhost:1527/recruitool;user=root;password=1234");
-		logger.log(Level.INFO, "Connected to new database!");
-		
-		loadRoles();
-		logger.log(Level.INFO, "{0} roles loaded.", roles.size());
-		
-		int numAccs = migrateAccounts();
-		logger.log(Level.INFO, "{0} accounts loaded.", numAccs);
-		
-		newConn.close();
-		oldConn.close();
-		
-		logger.log(Level.INFO, "Database migration completed!");
+	private DatabaseMigrator() throws SQLException, IOException {
+		try {
+			oldConn = DriverManager.getConnection("jdbc:derby:memory:mig_db;create=true");
+			parseLegacySqlScript();
+			logger.log(Level.INFO, "Legacy database created!");
+
+			newConn = DriverManager.getConnection("jdbc:derby://localhost:1527/recruitool;user=root;password=1234");
+			logger.log(Level.INFO, "Connected to new database!");
+
+			loadRoles();
+			logger.log(Level.INFO, "{0} roles loaded.", roles.size());
+
+			int numAccs = migrateAccounts();
+			logger.log(Level.INFO, "{0} accounts loaded.", numAccs);
+
+			newConn.close();
+			oldConn.close();
+
+			logger.log(Level.INFO, "Database migration completed!");
+		}
+		catch (SQLException ex) {
+			logger.log(Level.SEVERE, ex.getMessage());
+		}
 	}
 	
 	private void loadRoles() throws SQLException {
