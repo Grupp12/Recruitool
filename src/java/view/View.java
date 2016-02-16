@@ -6,6 +6,10 @@ import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import javax.ejb.EJB;
 
+/**
+ * View class to be used by JSF. Handles basic view logic and calls the 
+ * controller to perform application operations.
+ */
 @Named("myView")
 @SessionScoped
 public class View implements Serializable {
