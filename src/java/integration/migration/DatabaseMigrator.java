@@ -16,26 +16,26 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
-import javax.ejb.Singleton;
-import javax.ejb.Startup;
 
 import security.Crypto;
 
 public class DatabaseMigrator {
 	
-	private static final Logger logger = Logger.getLogger(DatabaseMigrator.class.getName());
-	
-	public static void main(String[] args) throws SQLException, IOException {
-		new DatabaseMigrator();
+	private DatabaseMigrator() {
 	}
 	
-	private Connection oldConn;
-	private Connection newConn;
+	private static final Logger logger = Logger.getLogger(DatabaseMigrator.class.getName());
 	
-	private HashMap<Integer, String> roles;
+	public static void main(String[] args) {
+		migrate();
+	}
 	
-	private DatabaseMigrator() throws SQLException, IOException {
+	private static Connection oldConn;
+	private static Connection newConn;
+	
+	private static HashMap<Integer, String> roles;
+	
+	private static void migrate() {
 		try {
 			oldConn = DriverManager.getConnection("jdbc:derby:memory:mig_db;create=true");
 			parseLegacySqlScript();
@@ -55,12 +55,12 @@ public class DatabaseMigrator {
 
 			logger.log(Level.INFO, "Database migration completed!");
 		}
-		catch (SQLException ex) {
+		catch (SQLException | IOException ex) {
 			logger.log(Level.SEVERE, ex.getMessage());
 		}
 	}
 	
-	private void loadRoles() throws SQLException {
+	private static void loadRoles() throws SQLException {
 		roles = new HashMap<>();
 		
 		Statement stmt = oldConn.createStatement();
@@ -80,7 +80,7 @@ public class DatabaseMigrator {
 		stmt.close();
 	}
 	
-	private int migrateAccounts() throws SQLException {
+	private static int migrateAccounts() throws SQLException {
 		String newAccSql = "INSERT INTO account " +
 				"(firstname, lastname, ssn, email, username, password, acc_role) " +
 				"VALUES(?, ?, ?, ?, ?, ?, ?)";
@@ -132,7 +132,7 @@ public class DatabaseMigrator {
 		return numAccs;
 	}
 	
-	private void parseLegacySqlScript() throws IOException {
+	private static void parseLegacySqlScript() throws IOException {
 		InputStream inStream = new FileInputStream("old.sql");
 		Reader reader = new BufferedReader(new InputStreamReader(inStream, "UTF-8"));
 		
