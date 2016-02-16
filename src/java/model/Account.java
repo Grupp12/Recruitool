@@ -16,6 +16,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+/**
+ * {@code Account} represents an account in the application.
+ */
 @Entity
 public class Account implements Serializable {
 
@@ -53,6 +56,15 @@ public class Account implements Serializable {
 	protected Account() {
 	}
 
+	/**
+	 * Creates a new {@code Account} object.
+	 * 
+	 * @param firstName The actor's first name.
+	 * @param lastName The actor's last name.
+	 * @param email The actor's e-mail address.
+	 * @param username The username of the account.
+	 * @param password The password of the account.
+	 */
 	public Account(String firstName, String lastName, String email, String username, String password) {
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -71,8 +83,8 @@ public class Account implements Serializable {
 	 * @param lastName The actor's last name.
 	 * @param ssn The actor's social security number.
 	 * @param email The actor's e-mail.
-	 * @param username The actor's username.
-	 * @param password The actor's password.
+	 * @param username The username of the account.
+	 * @param password The password of the account.
 	 * @param role The actor's role.
 	 */
 	public Account(String firstName, String lastName, String ssn, String email, String username, String password, String role) {
@@ -124,6 +136,11 @@ public class Account implements Serializable {
 		return String.format("model.User[ firstName=%s, lastName=%s ]", firstName, lastName);
 	}
 	
+	/**
+	 * Validates the data in this {@code Account} object.
+	 * 
+	 * @throws ValidationException If this account contains invalid data.
+	 */
 	public void validate() throws ValidationException {
 		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 		Validator validator = factory.getValidator();
