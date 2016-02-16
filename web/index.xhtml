@@ -5,37 +5,25 @@
 	  xmlns:components="http://java.sun.com/jsf/composite/components"
 	  xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
 	  xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
-	<h:head>
-		<title>Recruitool</title>
-		<link rel="stylesheet" type="text/css" href="webstyle.css" />
-	</h:head>
-	
 	<h:body>
-		<ui:include src="/resources/templates/header.xhtml"/>
-		<div id="loginForm">
-			<div class="header">
-				Register
-			</div>
-			<c:if test="#{myView.getComponent() == 'register'}">
-				<components:registercomp 
-					firstName="#{myView.registerForm.firstName}"
-					lastName="#{myView.registerForm.lastName}"
-					email="#{myView.registerForm.email}"
-					username="#{myView.registerForm.username}"
-					password="#{myView.registerForm.password}"
+		<ui:composition template="layout.xhtml">
+			<ui:define name="content">
+				<div id="loginForm">
+					<div class="header">
+						Register
+					</div>
+					<components:registercomp 
+						firstName="#{myView.registerForm.firstName}"
+						lastName="#{myView.registerForm.lastName}"
+						email="#{myView.registerForm.email}"
+						username="#{myView.registerForm.username}"
+						password="#{myView.registerForm.password}"
 
-					registerAction="#{myView.register()}"
-				/>
-			</c:if>
-			<c:if test="#{myView.getComponent() == 'login'}">
-				<components:logincomp 
-					username="#{myView.registerForm.username}"
-					password="#{myView.registerForm.password}"
+						registerAction="#{myView.register()}"
+						/>
+				</div>
+			</ui:define>
+		</ui:composition>
 
-					loginAction="#{myView.register()}"
-				/>
-			</c:if>
-		</div>
-		<ui:include src="/resources/templates/footer.xhtml"/>
 	</h:body>
 </html>

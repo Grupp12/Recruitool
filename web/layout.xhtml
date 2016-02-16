@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://xmlns.jcp.org/jsf/html"
+	  xmlns:ui="http://java.sun.com/jsf/facelets">
+	<h:head>
+		<title>TODO supply a title</title>
+		<!--<h:outputStylesheet name="/Recruitool/resources/css/webstyle.css" library="css" />-->
+		<link rel="stylesheet" type="text/css" href="resources/css/webstyle.css" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </h:head>
+    <h:body>
+		<div id="header">
+		<ui:insert name="header" >
+		  <ui:include src="/resources/components/headerfragment.xhtml" />
+		</ui:insert>
+	    </div>
+		
+		<div id="content">
+	  	<ui:insert name="content" >
+	 	  <ui:include src="/resources/components/registerfragment.xhtml" />
+	   	</ui:insert>
+	    </div>
+		
+		<div id="footer">
+	    	<ui:insert name="footer" >
+	    	  <ui:include src="/resources/components/footerfragment.xhtml" />
+	    	</ui:insert>
+    	</div>
+	</h:body>
+</html>
