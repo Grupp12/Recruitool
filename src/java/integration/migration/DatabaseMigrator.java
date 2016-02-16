@@ -1,6 +1,5 @@
 package integration.migration;
 
-import integration.AccountDao;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -10,63 +9,53 @@ import java.io.Reader;
 import java.security.SecureRandom;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.sql.DataSource;
 
-import model.Account;
 import security.Crypto;
 
 public class DatabaseMigrator {
 	
-	public static void main(String[] args) throws SQLException, IOException, NamingException {
+	public static void main(String[] args) throws SQLException, IOException {
 		DatabaseMigrator dbMig = new DatabaseMigrator();
 	}
 	
 	private static final Logger logger = Logger.getLogger(DatabaseMigrator.class.getName());
 	
-	private final Connection legacyConn;
-	private EntityManager em;
+	private final Connection oldConn;
+	private final Connection newConn;
 	
 	private HashMap<Integer, String> roles;
 	
-	protected DatabaseMigrator() throws SQLException, IOException, NamingException {
-		legacyConn = DriverManager.getConnection("jdbc:derby:memory:mig_db;create=true");
-		System.out.println("Source database created!");
-		
-		EntityManagerFactory emfactory = Persistence.createEntityManagerFactory("recruitool");
-		em = emfactory.createEntityManager();
-		
-		logger.log(Level.INFO, "Connection established");
-		
+	protected DatabaseMigrator() throws SQLException, IOException {
+		oldConn = DriverManager.getConnection("jdbc:derby:memory:mig_db;create=true");
 		parseLegacySqlScript();
+		logger.log(Level.INFO, "Legacy database created!");
+		
+		newConn = DriverManager.getConnection("jdbc:derby://localhost:1527/recruitool;user=root;password=1234");
+		logger.log(Level.INFO, "Connected to new database!");
 		
 		loadRoles();
+		logger.log(Level.INFO, "{0} roles loaded.", roles.size());
 		
-		migrateAccounts();
-
-		//em.close();
-		//emfactory.close();
+		int numAccs = migrateAccounts();
+		logger.log(Level.INFO, "{0} accounts loaded.", numAccs);
 		
-		legacyConn.close();
+		newConn.close();
+		oldConn.close();
+		
+		logger.log(Level.INFO, "Database migration completed!");
 	}
 	
 	private void loadRoles() throws SQLException {
 		roles = new HashMap<>();
 		
-		Statement stmt = legacyConn.createStatement();
+		Statement stmt = oldConn.createStatement();
 		
 		ResultSet rs = stmt.executeQuery("SELECT * FROM role");
 		while (rs.next()) {
@@ -83,10 +72,15 @@ public class DatabaseMigrator {
 		stmt.close();
 	}
 	
-	private void migrateAccounts() throws SQLException {
-		//em.getTransaction().begin();
+	private int migrateAccounts() throws SQLException {
+		String newAccSql = "INSERT INTO account " +
+				"(firstname, lastname, ssn, email, username, password, acc_role) " +
+				"VALUES(?, ?, ?, ?, ?, ?, ?)";
+		PreparedStatement newAccStmt = newConn.prepareStatement(newAccSql);
 		
-		Statement stmt = legacyConn.createStatement();
+		Statement stmt = oldConn.createStatement();
+		
+		int numAccs = 0;
 		
 		ResultSet rs = stmt.executeQuery("SELECT * FROM person");
 		while (rs.next()) {
@@ -111,21 +105,23 @@ public class DatabaseMigrator {
 			// Hash the password
 			password = Crypto.generateHash(password);
 			
-			Account account = new Account(
-					firstName, lastName, ssn,
-					email, username, password, role
-			);
+			// Set statement variables
+			newAccStmt.setString(1, firstName);
+			newAccStmt.setString(2, lastName);
+			newAccStmt.setString(3, ssn);
+			newAccStmt.setString(4, email);
+			newAccStmt.setString(5, username);
+			newAccStmt.setString(6, password);
+			newAccStmt.setString(7, role);
 			
-			try {
-				//em.persist(account);
-			} catch (Exception ex) {
-				logger.log(Level.SEVERE, null, ex);
-			}
+			newAccStmt.executeUpdate();
+			numAccs++;
 		}
 		
+		newAccStmt.close();
 		stmt.close();
 		
-		//em.getTransaction().commit();
+		return numAccs;
 	}
 	
 	private void parseLegacySqlScript() throws IOException {
@@ -139,7 +135,9 @@ public class DatabaseMigrator {
 			char ch = (char)in;
 			if (ch == ';') {
 				try {
-					legacyConn.createStatement().execute(statement.toString());
+					Statement stmt = oldConn.createStatement();
+					stmt.execute(statement.toString());
+					stmt.close();
 				} catch (SQLException ex) {
 					logger.log(Level.SEVERE, null, ex);
 				} finally {
