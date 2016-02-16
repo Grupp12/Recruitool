@@ -1,5 +1,6 @@
 package controller;
 
+import model.ValidationException;
 import integration.AccountDao;
 import integration.EntityExistsException;
 import javax.ejb.EJB;

@@ -1,6 +1,6 @@
 package integration;
 
-import controller.ValidationException;
+import model.ValidationException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -22,7 +22,7 @@ public class AccountDao {
 	 *
 	 * @param acc the account to persist.
 	 * 
-	 * @throws controller.ValidationException
+	 * @throws model.ValidationException
 	 * @throws EntityExistsException if account already exists.
 	 */
 	public void persistAccount(Account acc) throws ValidationException, EntityExistsException {

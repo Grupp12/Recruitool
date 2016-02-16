@@ -1,6 +1,5 @@
 package model;
 
-import controller.ValidationException;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Column;
