@@ -4,6 +4,11 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+/**
+ * Holds the register form values.
+ * 
+ * @author Colin
+ */
 public final class RegisterForm implements RegisterFormDTO {
 	
 	

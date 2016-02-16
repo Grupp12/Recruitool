@@ -8,6 +8,9 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import model.Account;
 
+/**
+ * DAO for handling Accounts in the database using JPA
+ */
 @Stateless
 public class AccountDao {
 
@@ -15,7 +18,7 @@ public class AccountDao {
 	EntityManager em;
 
 	/**
-	 * Persist account to database.
+	 * Persist account to database through JPA
 	 *
 	 * @param acc the account to persist.
 	 * 
