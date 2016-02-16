@@ -19,6 +19,10 @@ import java.util.logging.Logger;
 
 import security.Crypto;
 
+/**
+ * The {@code DatabaseMigrator} is a small program that is
+ * used for migrating the legacy database into our new database
+ */
 public class DatabaseMigrator {
 	
 	private DatabaseMigrator() {

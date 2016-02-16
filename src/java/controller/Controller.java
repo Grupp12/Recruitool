@@ -8,6 +8,9 @@ import model.Account;
 import security.Crypto;
 import view.RegisterFormDTO;
 
+/**
+ * The {@code Controller} is responsible for all business logic.
+ */
 @Stateful
 public class Controller {
 
