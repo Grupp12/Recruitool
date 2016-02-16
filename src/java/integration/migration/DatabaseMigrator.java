@@ -21,38 +21,46 @@ import security.Crypto;
 
 public class DatabaseMigrator {
 	
-	public static void main(String[] args) throws SQLException, IOException {
-		DatabaseMigrator dbMig = new DatabaseMigrator();
+	private DatabaseMigrator() {
 	}
 	
 	private static final Logger logger = Logger.getLogger(DatabaseMigrator.class.getName());
 	
-	private final Connection oldConn;
-	private final Connection newConn;
-	
-	private HashMap<Integer, String> roles;
-	
-	protected DatabaseMigrator() throws SQLException, IOException {
-		oldConn = DriverManager.getConnection("jdbc:derby:memory:mig_db;create=true");
-		parseLegacySqlScript();
-		logger.log(Level.INFO, "Legacy database created!");
-		
-		newConn = DriverManager.getConnection("jdbc:derby://localhost:1527/recruitool;user=root;password=1234");
-		logger.log(Level.INFO, "Connected to new database!");
-		
-		loadRoles();
-		logger.log(Level.INFO, "{0} roles loaded.", roles.size());
-		
-		int numAccs = migrateAccounts();
-		logger.log(Level.INFO, "{0} accounts loaded.", numAccs);
-		
-		newConn.close();
-		oldConn.close();
-		
-		logger.log(Level.INFO, "Database migration completed!");
+	public static void main(String[] args) {
+		migrate();
 	}
 	
-	private void loadRoles() throws SQLException {
+	private static Connection oldConn;
+	private static Connection newConn;
+	
+	private static HashMap<Integer, String> roles;
+	
+	private static void migrate() {
+		try {
+			oldConn = DriverManager.getConnection("jdbc:derby:memory:mig_db;create=true");
+			parseLegacySqlScript();
+			logger.log(Level.INFO, "Legacy database created!");
+
+			newConn = DriverManager.getConnection("jdbc:derby://localhost:1527/recruitool;user=root;password=1234");
+			logger.log(Level.INFO, "Connected to new database!");
+
+			loadRoles();
+			logger.log(Level.INFO, "{0} roles loaded.", roles.size());
+
+			int numAccs = migrateAccounts();
+			logger.log(Level.INFO, "{0} accounts loaded.", numAccs);
+
+			newConn.close();
+			oldConn.close();
+
+			logger.log(Level.INFO, "Database migration completed!");
+		}
+		catch (SQLException | IOException ex) {
+			logger.log(Level.SEVERE, ex.getMessage());
+		}
+	}
+	
+	private static void loadRoles() throws SQLException {
 		roles = new HashMap<>();
 		
 		Statement stmt = oldConn.createStatement();
@@ -72,7 +80,7 @@ public class DatabaseMigrator {
 		stmt.close();
 	}
 	
-	private int migrateAccounts() throws SQLException {
+	private static int migrateAccounts() throws SQLException {
 		String newAccSql = "INSERT INTO account " +
 				"(firstname, lastname, ssn, email, username, password, acc_role) " +
 				"VALUES(?, ?, ?, ?, ?, ?, ?)";
@@ -124,7 +132,7 @@ public class DatabaseMigrator {
 		return numAccs;
 	}
 	
-	private void parseLegacySqlScript() throws IOException {
+	private static void parseLegacySqlScript() throws IOException {
 		InputStream inStream = new FileInputStream("old.sql");
 		Reader reader = new BufferedReader(new InputStreamReader(inStream, "UTF-8"));
 		
