@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+	  xmlns:h="http://xmlns.jcp.org/jsf/html">
+	<composite:interface>
+		<composite:attribute name="firstName" />
+    	<composite:attribute name="lastName" />
+    	<composite:attribute name="email" />
+		<composite:attribute name="username" />
+		<composite:attribute name="password" />
+    	
+    	<composite:attribute name="registerAction" 
+    		method-signature="void register()" />
+	</composite:interface>
+
+	<composite:implementation>
+		<h:form>
+			<p class="loginInput">
+				<p>First Name</p>
+				
+				<h:inputText id="firstName" value="#{cc.attrs.firstName}"/>
+				<p><h:messages class="inputError" for="firstName" /></p>
+			</p>
+			<p class="loginInput">
+				<p>Last Name</p>
+				<h:inputText id="lastName" value="#{cc.attrs.lastName}"/>
+				<p><h:messages class="inputError" for="lastName" /></p>
+			</p>
+			<p class="loginInput">
+				<p>E-Mail</p>
+				<h:inputText id="email" value="#{cc.attrs.email}"/>
+				<p><h:messages class="inputError" for="email" /></p>
+			</p>
+			<p class="loginInput">
+				<p>Username</p>
+				<h:inputText id="username" value="#{cc.attrs.username}"/>
+				<p><h:messages class="inputError" for="username" /></p>
+			</p>
+			<p class="loginInput">
+				<p>Password</p>
+				<h:inputSecret id="password" value="#{cc.attrs.password}"/>
+				<p><h:messages class="inputError" for="password" /></p>
+			</p>
+			<p>
+				<h:commandButton value="Register" action="#{cc.attrs.registerAction}" />
+			</p>
+			<h:outputLabel for="registerMessage" rendered="#{myView.formMessage != null}"/>
+			<h:outputText id="registerMessage" value="#{myView.formMessage}" style="white-space: pre-wrap"/>
+		</h:form>
+	</composite:implementation>
+</html>
