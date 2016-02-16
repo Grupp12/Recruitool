@@ -8,15 +8,26 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
 /**
+ * Contains functions for hashing strings and validating hashes.
+ * 
  * Reference: http://howtodoinjava.com/security/how-to-generate-secure-password-hash-md5-sha-pbkdf2-bcrypt-examples/
  */
 public class Crypto {
+	
+	private Crypto() {
+	}
 	
 	private static final String ALGORITHM = "PBKDF2WithHmacSHA1";
 	private static final int ITERATIONS = 1000;
 	private static final int KEY_LENGTH = 1024;
 	private static final int SALT_LENGTH = 64;
 	
+	/**
+	 * Generates a hash from the input clear text.
+	 * 
+	 * @param clear The clear text to hash.
+	 * @return The generated hash.
+	 */
 	public static String generateHash(String clear) {
 		try {
 			SecureRandom srnd = SecureRandom.getInstance("SHA1PRNG", "SUN");
@@ -37,6 +48,13 @@ public class Crypto {
 		}
 	}
 	
+	/**
+	 * Validates the clear text with the hash.
+	 * 
+	 * @param clear The clear text.
+	 * @param hashed The hash.
+	 * @return Returns {@code true} if the clear text matches the hash.
+	 */
 	public static boolean validateHash(String clear, String hashed) {
 		try {
 			String[] parts = hashed.split(":");
@@ -48,11 +66,7 @@ public class Crypto {
 			SecretKeyFactory keyFact = SecretKeyFactory.getInstance(ALGORITHM);
 			byte[] testHash = keyFact.generateSecret(keySpec).getEncoded();
 			
-			/*int diff = hash.length ^ testHash.length;
-			for (int i = 0; i < hash.length && i < testHash.length; i++) {
-				diff |= hash[i] ^ testHash[i];
-			}
-			return diff == 0;*/
+			// Check if they are equal
 			if (hash.length != testHash.length)
 				return false;
 			for (int i = 0; i < hash.length; i++) {
