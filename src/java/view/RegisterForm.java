@@ -6,11 +6,8 @@ import javax.validation.constraints.Size;
 
 /**
  * Holds the register form values.
- * 
- * @author Colin
  */
 public final class RegisterForm implements RegisterFormDTO {
-	
 	
 	@NotNull
 	@Size(min = 1, message = "First Name can not be empty")
