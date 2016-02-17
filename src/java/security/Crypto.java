@@ -44,7 +44,7 @@ public class Crypto {
 			return saltStr + ":" + hashStr;
 		} catch (Exception ex) {
 			Logger.getLogger(Crypto.class.getName()).log(Level.SEVERE, null, ex);
-			throw new RuntimeException("Ka-Boom!");
+			return null;
 		}
 	}
 	
@@ -76,7 +76,7 @@ public class Crypto {
 			return true;
 		} catch (Exception ex) {
 			Logger.getLogger(Crypto.class.getName()).log(Level.SEVERE, null, ex);
-			throw new RuntimeException("Ka-Boom!");
+			return false;
 		}
 	}
 }
