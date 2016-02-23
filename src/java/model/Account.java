@@ -2,11 +2,14 @@ package model;
 
 import java.io.Serializable;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -52,6 +55,9 @@ public class Account implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private Role role;
 
+	@OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
+	private Application application;
+	
 	protected Account() {
 	}
 
@@ -100,6 +106,11 @@ public class Account implements Serializable {
 		this.role = Role.valueOf(role);
 	}
 
+	public Application createApplication() {
+		application = new Application(this);
+		return application;
+	}
+	
 	public String getFirstName() {
 		return firstName;
 	}
@@ -110,6 +121,10 @@ public class Account implements Serializable {
 	
 	public String getPassword() {
 		return password;
+	}
+	
+	public Application getApplication() {
+		return application;
 	}
 	
 	@Override
