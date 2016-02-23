@@ -4,7 +4,9 @@ import model.ValidationException;
 import integration.AccountDao;
 import integration.EntityExistsException;
 import javax.ejb.EJB;
-import javax.ejb.Stateful;
+import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import static javax.ejb.TransactionAttributeType.REQUIRES_NEW;
 import model.Account;
 import security.Crypto;
 import view.RegisterFormDTO;
@@ -12,11 +14,13 @@ import view.RegisterFormDTO;
 /**
  * The {@code Controller} is responsible for all business logic.
  */
-@Stateful
+@TransactionAttribute(REQUIRES_NEW)
+@Stateless
 public class Controller {
 
 	@EJB
 	private AccountDao accountDao;
+	
 
 	/**
 	 * Registers a new {@code Account}.
