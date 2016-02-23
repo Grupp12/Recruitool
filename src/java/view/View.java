@@ -5,6 +5,7 @@ import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import javax.ejb.EJB;
+import integration.EntityExistsException;
 
 /**
  * View class to be used by JSF. Handles basic view logic and calls the 
@@ -32,7 +33,8 @@ public class View implements Serializable {
 	/**
 	 * Registers a new account with the data currently in the register form.
 	 */
-	public void register() {
+	public String register() {
+		String result = "";
 		formMessage = null;
 		try {
 			controller.register(registerForm);
@@ -41,9 +43,22 @@ public class View implements Serializable {
 			registerForm = new RegisterForm();
 			
 			formMessage = "Your account has been created!";
-		} catch (Exception ex) {
+		} catch (Throwable ex) {
+			result = handleException(ex);
+		}
+		return result;
+	}
+	
+	public String handleException (Throwable ex) {
+		String errorMessage = "";
+		if(ex instanceof EntityExistsException) {
 			formMessage = ex.getMessage();
 		}
+		else {
+			errorMessage = "unhandledError";
+		}
+		
+		return errorMessage;
 	}
 	
 	/**

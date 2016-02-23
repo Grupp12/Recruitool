@@ -36,5 +36,6 @@ public class Controller {
 				hashedPassword);
 
 		accountDao.persistAccount(acc);
+		throw new IllegalStateException("Tesing !");
 	}
 }
