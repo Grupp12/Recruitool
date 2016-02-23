@@ -6,7 +6,6 @@ import integration.EntityExistsException;
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import model.Account;
-import model.Application;
 import security.Crypto;
 import view.RegisterFormDTO;
 
