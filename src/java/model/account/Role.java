@@ -1,4 +1,4 @@
-package model;
+package model.account;
 
 /**
  * Enum for the role of an account.

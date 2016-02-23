@@ -1,12 +1,16 @@
-package model;
+package model.account;
 
 import java.io.Serializable;
+import java.text.ParseException;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -14,6 +18,8 @@ import javax.validation.ValidatorFactory;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import model.application.Application;
+import model.ValidationException;
 
 /**
  * {@code Account} represents an account in the application.
@@ -52,6 +58,9 @@ public class Account implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private Role role;
 
+	@OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
+	private Application application;
+	
 	protected Account() {
 	}
 
@@ -100,6 +109,11 @@ public class Account implements Serializable {
 		this.role = Role.valueOf(role);
 	}
 
+	public Application createApplication(String from, String to) throws ParseException {
+		application = new Application(this, from, to);
+		return application;
+	}
+	
 	public String getFirstName() {
 		return firstName;
 	}
@@ -110,6 +124,10 @@ public class Account implements Serializable {
 	
 	public String getPassword() {
 		return password;
+	}
+	
+	public Application getApplication() {
+		return application;
 	}
 	
 	@Override
@@ -132,7 +150,7 @@ public class Account implements Serializable {
 
 	@Override
 	public String toString() {
-		return String.format("model.User[ firstName=%s, lastName=%s ]", firstName, lastName);
+		return String.format("User[ firstName=%s, lastName=%s ]", firstName, lastName);
 	}
 	
 	/**
