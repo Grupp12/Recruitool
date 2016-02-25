@@ -30,7 +30,7 @@ public class Crypto {
 	 */
 	public static String generateHash(String clear) {
 		try {
-			SecureRandom srnd = SecureRandom.getInstance("SHA1PRNG", "SUN");
+			SecureRandom srnd = SecureRandom.getInstance("SHA1PRNG");
 			byte[] salt = new byte[SALT_LENGTH];
 			srnd.nextBytes(salt);
 		
