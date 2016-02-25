@@ -3,13 +3,9 @@ package controller;
 import model.ValidationException;
 import integration.AccountDao;
 import integration.EntityExistsException;
-import java.text.ParseException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import model.account.Account;
-import model.application.ApplicationStatus;
 import security.Crypto;
 import view.RegisterFormDTO;
 
@@ -38,13 +34,6 @@ public class Controller {
 				registerForm.getEmail(),
 				registerForm.getUsername(),
 				hashedPassword);
-
-		try {
-			System.out.println(acc.createApplication("1970-01-01", "2016-12-31").toString());
-		} catch (ParseException ex) {
-			Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
-		}
-		acc.getApplication().setStatus(ApplicationStatus.DECLINED);
 		
 		accountDao.persistAccount(acc);
 	}

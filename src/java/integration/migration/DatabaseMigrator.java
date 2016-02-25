@@ -16,6 +16,7 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.account.Role;
 
 import security.Crypto;
 
@@ -37,7 +38,7 @@ public class DatabaseMigrator {
 	private static Connection oldConn;
 	private static Connection newConn;
 	
-	private static HashMap<Integer, String> roles;
+	private static HashMap<Integer, Role> roles;
 	
 	private static void migrate() {
 		try {
@@ -78,7 +79,7 @@ public class DatabaseMigrator {
 			if (name.equals("RECRUIT"))
 				name = "RECRUITER";
 			
-			roles.put(id, name);
+			roles.put(id, Role.valueOf(name));
 		}
 		
 		stmt.close();
@@ -98,15 +99,15 @@ public class DatabaseMigrator {
 		while (rs.next()) {
 			String firstName = rs.getString("name");
 			String lastName = rs.getString("surname");
-			String ssn = rs.getString("ssn");
+			//String ssn = rs.getString("ssn");
 			String email = rs.getString("email");
 			String username = rs.getString("username");
 			String password = rs.getString("password");
 			
 			int roleId = rs.getInt("role_id");
-			String role = roles.get(roleId);
+			Role role = roles.get(roleId);
 			
-			if (role.equals("APPLICANT")) {
+			if (role == Role.APPLICANT) {
 				// Applicants does not have a password or username
 				// in the legacy database, so we must generate them.
 				
@@ -120,11 +121,11 @@ public class DatabaseMigrator {
 			// Set statement variables
 			newAccStmt.setString(1, firstName);
 			newAccStmt.setString(2, lastName);
-			newAccStmt.setString(3, ssn);
+			//newAccStmt.setString(3, ssn);
 			newAccStmt.setString(4, email);
 			newAccStmt.setString(5, username);
 			newAccStmt.setString(6, password);
-			newAccStmt.setString(7, role);
+			newAccStmt.setString(7, role.toString());
 			
 			newAccStmt.executeUpdate();
 			numAccs++;

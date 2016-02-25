@@ -2,10 +2,9 @@ package model.application;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,9 +16,9 @@ public class Availability implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-
+	
 	@Column(name = "FROM_DATE")
 	private Timestamp from;
 	
@@ -29,18 +28,9 @@ public class Availability implements Serializable {
 	protected Availability() {
 	}
 	
-	public Availability(String from, String to) throws ParseException {
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		
-		Date fromDate = dateFormat.parse(from);
-		Date toDate = dateFormat.parse(to);
-		
-		this.from = new Timestamp(fromDate.getTime());
-		this.to = new Timestamp(toDate.getTime());
-	}
-	
-	public long getId() {
-		return id;
+	public Availability(Timestamp from, Timestamp to) throws ParseException {
+		this.from = from;
+		this.to = to;
 	}
 	
 	public Timestamp getFrom() {
@@ -69,7 +59,7 @@ public class Availability implements Serializable {
 		
 		Availability other = (Availability) object;
 		
-		return other.id == id;
+		return id == other.id;
 	}
 
 	/**
@@ -77,7 +67,22 @@ public class Availability implements Serializable {
 	 */
 	@Override
 	public String toString() {
-		return String.format("Availability[ id=%d, from=%s, to=%s ]", id, from.toString(), to.toString());
+		class ConvertToDateString {
+			String convert(Timestamp ts) {
+				Calendar cal = Calendar.getInstance();
+				cal.setTimeInMillis(ts.getTime());
+				
+				return String.format("%04d-%02d-%02d",
+						cal.get(Calendar.YEAR),
+						cal.get(Calendar.MONTH) + 1,
+						cal.get(Calendar.DAY_OF_MONTH));
+			}
+		}
+		ConvertToDateString converter = new ConvertToDateString();
+		
+		return String.format("Availability[ from=%s, to=%s ]",
+				converter.convert(from),
+				converter.convert(to));
 	}
 	
 }
