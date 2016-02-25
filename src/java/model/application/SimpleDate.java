@@ -7,13 +7,19 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 /**
- * {@code SimpleDate} only serves to provide a constructor for
- * {@code Timestamp} that takes a {@code String} date in the
- * format yyy-MM-dd.
+ * {@code SimpleDate} only serves to provide useful
+ * constructors for the {@code Timestamp} class.
  */
 public class SimpleDate extends Timestamp implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	/**
+	 * Constructs a new {@code SimpleDate} set to the current
+	 * date and time.
+	 */
+	public SimpleDate() {
+		super(System.currentTimeMillis());
+	}
 	/**
 	 * Constructs a new {@code SimpleDate} set to the date sent as a parameter.
 	 * The date must be in the format yyyy-MM-dd.
