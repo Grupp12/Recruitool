@@ -2,15 +2,17 @@ package model.application;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.text.ParseException;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+/**
+ * Contains information about an applicant's
+ * availability period.
+ */
 @Entity
 public class Availability implements Serializable {
 
@@ -28,7 +30,14 @@ public class Availability implements Serializable {
 	protected Availability() {
 	}
 	
-	public Availability(Timestamp from, Timestamp to) throws ParseException {
+	/**
+	 * Creates a new {@code Availability} period starting at
+	 * the {@code from} date and ends at the {@code to} date.
+	 * 
+	 * @param from
+	 * @param to 
+	 */
+	public Availability(Timestamp from, Timestamp to) {
 		this.from = from;
 		this.to = to;
 	}
