@@ -2,6 +2,7 @@ package model.account;
 
 import java.io.Serializable;
 import java.text.ParseException;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -84,7 +85,7 @@ public class Account implements Serializable {
 		this.role = Role.APPLICANT;
 	}
 
-	public void createApplication(Availability availability, Set<CompetenceProfile> competences)
+	public void createApplication(Availability availability, List<CompetenceProfile> competences)
 			throws ParseException {
 		application = new Application(this, availability, competences);
 	}
