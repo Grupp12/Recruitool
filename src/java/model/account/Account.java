@@ -20,6 +20,8 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import model.application.Application;
 import model.ValidationException;
+import model.application.Availability;
+import model.application.CompetenceProfile;
 
 /**
  * {@code Account} represents an account in the application.
@@ -36,9 +38,6 @@ public class Account implements Serializable {
 	@Size(min = 1, message = "Last Name can not be empty")
 	private String lastName;
 
-	// Must be allowed to be null
-	private String ssn;
-	
 	@NotNull
 	@Size(min = 1, message = "E-Mail can not be empty")
 	@Pattern(regexp = "[\\w\\.-]*[a-zA-Z0-9_]@[\\w\\.-]*[a-zA-Z0-9]\\.[a-zA-Z][a-zA-Z\\.]*[a-zA-Z]",
@@ -84,34 +83,10 @@ public class Account implements Serializable {
 		
 		this.role = Role.APPLICANT;
 	}
-	/**
-	 * This constructor is used by the legacy database migrator.
-	 * 
-	 * @param firstName The actor's first name.
-	 * @param lastName The actor's last name.
-	 * @param ssn The actor's social security number.
-	 * @param email The actor's e-mail.
-	 * @param username The username of the account.
-	 * @param password The password of the account.
-	 * @param role The actor's role.
-	 */
-	public Account(String firstName, String lastName, String ssn, String email, String username, String password, String role) {
-		this.firstName = firstName;
-		this.lastName = lastName;
 
-		this.ssn = ssn;
-		
-		this.email = email;
-
-		this.username = username;
-		this.password = password;
-		
-		this.role = Role.valueOf(role);
-	}
-
-	public Application createApplication(String from, String to) throws ParseException {
-		application = new Application(this, from, to);
-		return application;
+	public void createApplication(Availability availability, Set<CompetenceProfile> competences)
+			throws ParseException {
+		application = new Application(this, availability, competences);
 	}
 	
 	public String getFirstName() {
@@ -128,6 +103,13 @@ public class Account implements Serializable {
 	
 	public Application getApplication() {
 		return application;
+	}
+	
+	public Role getRole() {
+		return role;
+	}
+	public void setRole(Role role) {
+		this.role = role;
 	}
 	
 	@Override
