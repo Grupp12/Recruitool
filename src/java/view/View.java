@@ -49,7 +49,7 @@ public class View implements Serializable {
 		return result;
 	}
 	
-	public String handleException (Throwable ex) {
+	private String handleException (Throwable ex) {
 		String errorMessage = "";
 		if(ex instanceof EntityExistsException) {
 			formMessage = ex.getMessage();
