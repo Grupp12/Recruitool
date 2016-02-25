@@ -4,6 +4,9 @@ import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+/**
+ * Describes a competence that an applicant can have.
+ */
 @Entity
 public class Competence implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -14,6 +17,11 @@ public class Competence implements Serializable {
 	protected Competence() {
 	}
 	
+	/**
+	 * Creates a new {@code Competence} with the specified name.
+	 * 
+	 * @param name the name of the competence
+	 */
 	public Competence(String name) {
 		this.name = name;
 	}
@@ -50,5 +58,4 @@ public class Competence implements Serializable {
 	public String toString() {
 		return String.format("Competence[ name=%s ]", name);
 	}
-	
 }

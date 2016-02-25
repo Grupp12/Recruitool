@@ -3,7 +3,6 @@ package model.application;
 import model.account.Account;
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.text.ParseException;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -19,10 +18,14 @@ import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+/**
+ * Contains information about one application
+ * submitted by an applicant.
+ */
 @Entity
 public class Application implements Serializable {
-
 	private static final long serialVersionUID = 1L;
+	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "APPL_ID")
@@ -54,8 +57,14 @@ public class Application implements Serializable {
 	protected Application() {
 	}
 	
-	public Application(Account account, Availability availability, List<CompetenceProfile> competences)
-			throws ParseException {
+	/**
+	 * Creates a new {@code Application} submitted by an applicant.
+	 * 
+	 * @param account the applicant's account.
+	 * @param availability the applicant's availability period.
+	 * @param competences the applicant's competences.
+	 */
+	public Application(Account account, Availability availability, List<CompetenceProfile> competences) {
 		this.account = account;
 		
 		this.availability = availability;
@@ -104,7 +113,7 @@ public class Application implements Serializable {
 		
 		Application other = (Application) object;
 		
-		return other.id == id;
+		return id == other.id;
 	}
 
 	/**
