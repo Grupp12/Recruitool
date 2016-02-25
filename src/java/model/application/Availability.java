@@ -2,10 +2,7 @@ package model.application;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,7 +16,7 @@ public class Availability implements Serializable {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
-
+	
 	@Column(name = "FROM_DATE")
 	private Timestamp from;
 	
@@ -29,18 +26,9 @@ public class Availability implements Serializable {
 	protected Availability() {
 	}
 	
-	public Availability(String from, String to) throws ParseException {
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		
-		Date fromDate = dateFormat.parse(from);
-		Date toDate = dateFormat.parse(to);
-		
-		this.from = new Timestamp(fromDate.getTime());
-		this.to = new Timestamp(toDate.getTime());
-	}
-	
-	public long getId() {
-		return id;
+	public Availability(Timestamp from, Timestamp to) throws ParseException {
+		this.from = from;
+		this.to = to;
 	}
 	
 	public Timestamp getFrom() {
@@ -69,7 +57,7 @@ public class Availability implements Serializable {
 		
 		Availability other = (Availability) object;
 		
-		return other.id == id;
+		return id == other.id;
 	}
 
 	/**
@@ -77,7 +65,7 @@ public class Availability implements Serializable {
 	 */
 	@Override
 	public String toString() {
-		return String.format("Availability[ id=%d, from=%s, to=%s ]", id, from.toString(), to.toString());
+		return String.format("Availability[ from=%s, to=%s ]", from.toString(), to.toString());
 	}
 	
 }
