@@ -8,6 +8,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
 /**
@@ -20,13 +21,15 @@ public class CompetenceProfile implements Serializable {
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "COMP_ID")
+	@Column(name = "ID")
 	private long id;
 
 	@OneToOne(fetch = FetchType.LAZY, optional = false,
 			cascade = { CascadeType.PERSIST, CascadeType.REFRESH })
+	@JoinColumn(name = "COMP_NAME")
 	private Competence competence;
 	
+	@Column(name = "YEARS_OF_EXP")
 	private int yearsOfExperience;
 	
 	protected CompetenceProfile() {
