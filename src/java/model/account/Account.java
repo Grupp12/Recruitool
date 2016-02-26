@@ -1,7 +1,6 @@
 package model.account;
 
 import java.io.Serializable;
-import java.text.ParseException;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -11,6 +10,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -23,6 +23,9 @@ import model.application.Application;
 import model.ValidationException;
 import model.application.Availability;
 import model.application.CompetenceProfile;
+import model.application.SimpleDate;
+import security.Crypto;
+import view.RegisterFormDTO;
 
 /**
  * {@code Account} represents an account in the application.
@@ -34,31 +37,38 @@ public class Account implements Serializable {
 
 	@NotNull
 	@Size(min = 1, message = "First Name can not be empty")
+	@Column(name = "FIRSTNAME")
 	private String firstName;
+	
 	@NotNull
 	@Size(min = 1, message = "Last Name can not be empty")
+	@Column(name = "LASTNAME")
 	private String lastName;
 
 	@NotNull
 	@Size(min = 1, message = "E-Mail can not be empty")
 	@Pattern(regexp = "[\\w\\.-]*[a-zA-Z0-9_]@[\\w\\.-]*[a-zA-Z0-9]\\.[a-zA-Z][a-zA-Z\\.]*[a-zA-Z]",
 			message = "E-Mail is not valid")
+	@Column(name = "EMAIL")
 	private String email;
 
 	@Id
 	@NotNull
 	@Size(min = 1, message = "Username can not be empty")
+	@Column(name = "USERNAME")
 	private String username;
+	
 	@NotNull
 	@Size(min = 1, message = "Password can not be empty")
-	@Column(length = 261) // Hash is always 261 chars long
+	@Column(name = "PASSWORD", length = 261) // Hash is always 261 chars long
 	private String password;
 	
-	@Column(name = "ACC_ROLE")
 	@Enumerated(EnumType.STRING)
+	@Column(name = "ACC_ROLE")
 	private Role role;
 
 	@OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
+	@JoinColumn(name = "APPL_ID")
 	private Application application;
 	
 	protected Account() {
@@ -67,27 +77,25 @@ public class Account implements Serializable {
 	/**
 	 * Creates a new {@code Account} object.
 	 * 
-	 * @param firstName The actor's first name.
-	 * @param lastName The actor's last name.
-	 * @param email The actor's e-mail address.
-	 * @param username The username of the account.
-	 * @param password The password of the account.
+	 * @param registerForm the form input where account info is stored
 	 */
-	public Account(String firstName, String lastName, String email, String username, String password) {
-		this.firstName = firstName;
-		this.lastName = lastName;
+	public Account(RegisterFormDTO registerForm) {
+		this.firstName = registerForm.getFirstName();
+		this.lastName = registerForm.getLastName();
 
-		this.email = email;
+		this.email = registerForm.getEmail();
 
-		this.username = username;
-		this.password = password;
+		this.username = registerForm.getUsername();
+		this.password = Crypto.generateHash(registerForm.getPassword());
 		
 		this.role = Role.APPLICANT;
 	}
 
-	public void createApplication(Availability availability, List<CompetenceProfile> competences)
-			throws ParseException {
-		application = new Application(this, availability, competences);
+	public void createApplication(List<CompetenceProfile> competences, List<Availability> availabilities) {
+		application = new Application(this);
+		application.setAvailabilities(availabilities);
+		application.setCompetences(competences);
+		application.setTimeOfRegistration(new SimpleDate());
 	}
 	
 	public String getFirstName() {
@@ -98,8 +106,8 @@ public class Account implements Serializable {
 		return username;
 	}
 	
-	public String getPassword() {
-		return password;
+	public boolean validatePassword(String password) {
+		return Crypto.validateHash(password, this.password);
 	}
 	
 	public Application getApplication() {

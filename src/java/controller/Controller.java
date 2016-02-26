@@ -6,7 +6,6 @@ import integration.EntityExistsException;
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import model.account.Account;
-import security.Crypto;
 import view.RegisterFormDTO;
 
 /**
@@ -27,13 +26,7 @@ public class Controller {
 	 * @throws EntityExistsException if account already exists.
 	 */
 	public void register(RegisterFormDTO registerForm) throws ValidationException, EntityExistsException {
-		String hashedPassword = Crypto.generateHash(registerForm.getPassword());
-		Account acc = new Account(
-				registerForm.getFirstName(),
-				registerForm.getLastName(),
-				registerForm.getEmail(),
-				registerForm.getUsername(),
-				hashedPassword);
+		Account acc = new Account(registerForm);
 		
 		accountDao.persistAccount(acc);
 	}
