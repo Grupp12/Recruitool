@@ -20,6 +20,7 @@ public class SimpleDate extends Timestamp implements Serializable {
 	public SimpleDate() {
 		super(System.currentTimeMillis());
 	}
+	
 	/**
 	 * Constructs a new {@code SimpleDate} set to the date sent as a parameter.
 	 * The date must be in the format yyyy-MM-dd.
