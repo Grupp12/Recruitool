@@ -38,12 +38,13 @@ public class DatabaseMigrator {
 	private static Connection oldConn;
 	private static Connection newConn;
 	
-	private static HashMap<Integer, String> roles = new HashMap<>();
-	private static HashMap<Integer, MigratedAccount> accounts = new HashMap<>();
-	private static HashMap<Integer, MigratedAvailability> availabilities = new HashMap<>();
+	private static HashMap<Long, String> roles = new HashMap<>();
+	private static HashMap<Long, String> competences = new HashMap<>();
 	
-	private static HashMap<Integer, String> competences = new HashMap<>();
-	private static HashMap<Integer, MigratedCompetenceProfile> profiles = new HashMap<>();
+	// Legacy objects
+	private static HashMap<Long, LegacyAccount> accounts = new HashMap<>();
+	private static HashMap<Long, LegacyAvailability> availabilities = new HashMap<>();
+	private static HashMap<Long, LegacyCompetenceProfile> profiles = new HashMap<>();
 	
 	private static void migrate() {
 		try {
@@ -91,7 +92,7 @@ public class DatabaseMigrator {
 		ResultSet rs = stmt.executeQuery("SELECT * FROM role");
 		while (rs.next())
 		{
-			int id = rs.getInt("role_id");
+			long id = rs.getLong("role_id");
 			
 			String name = rs.getString("name").toUpperCase();
 			
@@ -111,7 +112,7 @@ public class DatabaseMigrator {
 		ResultSet rs = stmt.executeQuery("SELECT * FROM person");
 		while (rs.next())
 		{
-			int id = rs.getInt("person_id");
+			long id = rs.getLong("person_id");
 			
 			String firstName = rs.getString("name");
 			String lastName = rs.getString("surname");
@@ -123,7 +124,7 @@ public class DatabaseMigrator {
 			String username = rs.getString("username");
 			String password = rs.getString("password");
 			
-			int role_id = rs.getInt("role_id");
+			long role_id = rs.getLong("role_id");
 			
 			if (roles.get(role_id).equals("APPLICANT")) {
 				// Applicants does not have a password or username
@@ -136,8 +137,8 @@ public class DatabaseMigrator {
 			// Hash the password
 			password = Crypto.generateHash(password);
 			
-			// Create migrated account
-			MigratedAccount account = new MigratedAccount();
+			// Create legacy account
+			LegacyAccount account = new LegacyAccount();
 			
 			account.firstName = firstName;
 			account.lastName = lastName;
@@ -163,15 +164,15 @@ public class DatabaseMigrator {
 		ResultSet rs = stmt.executeQuery("SELECT * FROM availability");
 		while (rs.next())
 		{
-			int id = rs.getInt("availability_id");
+			long id = rs.getLong("availability_id");
 			
 			Date fromDate = rs.getDate("from_date");			
 			Date toDate = rs.getDate("to_date");
 			
-			int account_id = rs.getInt("person_id");
+			long account_id = rs.getLong("person_id");
 			
-			// Create migrated availability
-			MigratedAvailability availability = new MigratedAvailability();
+			// Create legacy availability
+			LegacyAvailability availability = new LegacyAvailability();
 			
 			availability.id = id;
 			
@@ -192,7 +193,7 @@ public class DatabaseMigrator {
 		ResultSet rs = stmt.executeQuery("SELECT * FROM competence");
 		while (rs.next())
 		{
-			int id = rs.getInt("competence_id");
+			long id = rs.getLong("competence_id");
 			
 			String name = rs.getString("name").toUpperCase();
 			
@@ -208,15 +209,15 @@ public class DatabaseMigrator {
 		ResultSet rs = stmt.executeQuery("SELECT * FROM competence_profile");
 		while (rs.next())
 		{
-			int id = rs.getInt("competence_profile_id");
+			long id = rs.getLong("competence_profile_id");
 			
 			int yearsOfExp = rs.getInt("years_of_experience");
 			
-			int account_id = rs.getInt("person_id");
-			int competence_id = rs.getInt("competence_id");
+			long account_id = rs.getLong("person_id");
+			long competence_id = rs.getLong("competence_id");
 			
-			// Create migrated competence profile
-			MigratedCompetenceProfile profile = new MigratedCompetenceProfile();
+			// Create legacy competence profile
+			LegacyCompetenceProfile profile = new LegacyCompetenceProfile();
 			
 			profile.id = id;
 			
@@ -236,6 +237,22 @@ public class DatabaseMigrator {
 				"(firstname, lastname, email, username, password, acc_role) " +
 				"VALUES(?, ?, ?, ?, ?, ?)";
 		PreparedStatement newAccStmt = newConn.prepareStatement(newAccSql);
+		
+		for (LegacyAccount account : accounts.values())
+		{
+			newAccStmt.setString(1, account.firstName);
+			newAccStmt.setString(2, account.lastName);
+			
+			newAccStmt.setString(3, account.email);
+			
+			newAccStmt.setString(4, account.username);
+			newAccStmt.setString(5, account.password);
+			
+			String acc_role = roles.get(account.role_id);
+			newAccStmt.setString(6, acc_role);
+			
+			newAccStmt.execute();
+		}
 		
 		newAccStmt.close();
 	}

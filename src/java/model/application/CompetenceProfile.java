@@ -26,7 +26,7 @@ public class CompetenceProfile implements Serializable {
 
 	@OneToOne(fetch = FetchType.LAZY, optional = false,
 			cascade = { CascadeType.PERSIST, CascadeType.REFRESH })
-	@JoinColumn(name = "COMP_NAME")
+	@JoinColumn(name = "COMP_ID")
 	private Competence competence;
 	
 	@Column(name = "YEARS_OF_EXP")

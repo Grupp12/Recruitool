@@ -1,16 +1,18 @@
 package integration.migration;
 
-public class MigratedAccount
+class LegacyAccount
 {
+	long id;
+	
 	String firstName;
 	String lastName;
+	
+	String ssn;
 	
 	String email;
 	
 	String username;
 	String password;
 	
-	String acc_role;
-	
-	long appl_id;
+	long role_id;
 }

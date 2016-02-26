@@ -1,12 +1,10 @@
 package integration.migration;
 
-class MigratedCompetenceProfile
+public class MigratedCompetenceProfile
 {
-	int id;
+	long id;
 	
 	int yearsOfExp;
 	
-	int account_id;
-	
-	int competence_id;
+	long comp_id;
 }
