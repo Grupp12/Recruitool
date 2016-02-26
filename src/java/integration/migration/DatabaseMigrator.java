@@ -58,6 +58,7 @@ public class DatabaseMigrator {
 			loadLegacyTables();
 			oldConn.close();
 
+			migrateAccounts();
 			migrateApplications();
 			
 			newConn.close();
