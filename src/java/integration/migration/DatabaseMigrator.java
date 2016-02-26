@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.security.SecureRandom;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,7 +17,6 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.account.Role;
 
 import security.Crypto;
 
@@ -38,7 +38,12 @@ public class DatabaseMigrator {
 	private static Connection oldConn;
 	private static Connection newConn;
 	
-	private static HashMap<Integer, Role> roles;
+	private static HashMap<Integer, String> roles = new HashMap<>();
+	private static HashMap<Integer, MigratedAccount> accounts = new HashMap<>();
+	private static HashMap<Integer, MigratedAvailability> availabilities = new HashMap<>();
+	
+	private static HashMap<Integer, String> competences = new HashMap<>();
+	private static HashMap<Integer, MigratedCompetenceProfile> profiles = new HashMap<>();
 	
 	private static void migrate() {
 		try {
@@ -49,14 +54,12 @@ public class DatabaseMigrator {
 			newConn = DriverManager.getConnection("jdbc:derby://localhost:1527/recruitool;user=root;password=1234");
 			logger.log(Level.INFO, "Connected to new database!");
 
-			loadRoles();
-			logger.log(Level.INFO, "{0} roles loaded.", roles.size());
-
-			int numAccs = migrateAccounts();
-			logger.log(Level.INFO, "{0} accounts loaded.", numAccs);
-
-			newConn.close();
+			loadLegacyTables();
 			oldConn.close();
+
+			migrateApplications();
+			
+			newConn.close();
 
 			logger.log(Level.INFO, "Database migration completed!");
 		}
@@ -65,49 +68,64 @@ public class DatabaseMigrator {
 		}
 	}
 	
-	private static void loadRoles() throws SQLException {
-		roles = new HashMap<>();
+	private static void loadLegacyTables() throws SQLException {
+		loadRoles();
+		logger.log(Level.INFO, "{0} roles loaded.", roles.size());
+
+		loadAccounts();
+		logger.log(Level.INFO, "{0} accounts loaded.", accounts.size());
 		
+		loadAvailabilities();
+		logger.log(Level.INFO, "{0} availabilities loaded.", availabilities.size());
+		
+		loadCompetences();
+		logger.log(Level.INFO, "{0} competences loaded.", competences.size());
+		
+		loadCompetenceProfiles();
+		logger.log(Level.INFO, "{0} competence profiles loaded.", competences.size());
+	}
+	
+	private static void loadRoles() throws SQLException {
 		Statement stmt = oldConn.createStatement();
 		
 		ResultSet rs = stmt.executeQuery("SELECT * FROM role");
-		while (rs.next()) {
+		while (rs.next())
+		{
 			int id = rs.getInt("role_id");
+			
 			String name = rs.getString("name").toUpperCase();
 			
 			// Fix wrong name in legacy database
 			if (name.equals("RECRUIT"))
 				name = "RECRUITER";
 			
-			roles.put(id, Role.valueOf(name));
+			roles.put(id, name);
 		}
 		
 		stmt.close();
 	}
 	
-	private static int migrateAccounts() throws SQLException {
-		String newAccSql = "INSERT INTO account " +
-				"(firstname, lastname, ssn, email, username, password, acc_role) " +
-				"VALUES(?, ?, ?, ?, ?, ?, ?)";
-		PreparedStatement newAccStmt = newConn.prepareStatement(newAccSql);
-		
+	private static void loadAccounts() throws SQLException {
 		Statement stmt = oldConn.createStatement();
-		
-		int numAccs = 0;
-		
+			
 		ResultSet rs = stmt.executeQuery("SELECT * FROM person");
-		while (rs.next()) {
+		while (rs.next())
+		{
+			int id = rs.getInt("person_id");
+			
 			String firstName = rs.getString("name");
 			String lastName = rs.getString("surname");
-			//String ssn = rs.getString("ssn");
+			
+			String ssn = rs.getString("ssn");
+			
 			String email = rs.getString("email");
+			
 			String username = rs.getString("username");
 			String password = rs.getString("password");
 			
-			int roleId = rs.getInt("role_id");
-			Role role = roles.get(roleId);
+			int role_id = rs.getInt("role_id");
 			
-			if (role == Role.APPLICANT) {
+			if (roles.get(role_id).equals("APPLICANT")) {
 				// Applicants does not have a password or username
 				// in the legacy database, so we must generate them.
 				
@@ -118,23 +136,112 @@ public class DatabaseMigrator {
 			// Hash the password
 			password = Crypto.generateHash(password);
 			
-			// Set statement variables
-			newAccStmt.setString(1, firstName);
-			newAccStmt.setString(2, lastName);
-			//newAccStmt.setString(3, ssn);
-			newAccStmt.setString(4, email);
-			newAccStmt.setString(5, username);
-			newAccStmt.setString(6, password);
-			newAccStmt.setString(7, role.toString());
+			// Create migrated account
+			MigratedAccount account = new MigratedAccount();
 			
-			newAccStmt.executeUpdate();
-			numAccs++;
+			account.firstName = firstName;
+			account.lastName = lastName;
+			
+			account.ssn = ssn;
+			
+			account.email = email;
+			
+			account.username = username;
+			account.password = password;
+			
+			account.role_id = role_id;
+			
+			accounts.put(id, account);
 		}
 		
-		newAccStmt.close();
 		stmt.close();
+	}
+	
+	private static void loadAvailabilities() throws SQLException {
+		Statement stmt = oldConn.createStatement();
+			
+		ResultSet rs = stmt.executeQuery("SELECT * FROM availability");
+		while (rs.next())
+		{
+			int id = rs.getInt("availability_id");
+			
+			Date fromDate = rs.getDate("from_date");			
+			Date toDate = rs.getDate("to_date");
+			
+			int account_id = rs.getInt("person_id");
+			
+			// Create migrated availability
+			MigratedAvailability availability = new MigratedAvailability();
+			
+			availability.id = id;
+			
+			availability.fromDate = fromDate;
+			availability.toDate = toDate;
+			
+			availability.account_id = account_id;
+			
+			availabilities.put(id, availability);
+		}
 		
-		return numAccs;
+		stmt.close();
+	}
+	
+	private static void loadCompetences() throws SQLException {
+		Statement stmt = oldConn.createStatement();
+		
+		ResultSet rs = stmt.executeQuery("SELECT * FROM competence");
+		while (rs.next())
+		{
+			int id = rs.getInt("competence_id");
+			
+			String name = rs.getString("name").toUpperCase();
+			
+			competences.put(id, name);
+		}
+		
+		stmt.close();
+	}
+	
+	private static void loadCompetenceProfiles() throws SQLException {
+		Statement stmt = oldConn.createStatement();
+		
+		ResultSet rs = stmt.executeQuery("SELECT * FROM competence_profile");
+		while (rs.next())
+		{
+			int id = rs.getInt("competence_profile_id");
+			
+			int yearsOfExp = rs.getInt("years_of_experience");
+			
+			int account_id = rs.getInt("person_id");
+			int competence_id = rs.getInt("competence_id");
+			
+			// Create migrated competence profile
+			MigratedCompetenceProfile profile = new MigratedCompetenceProfile();
+			
+			profile.id = id;
+			
+			profile.yearsOfExp = yearsOfExp;
+			
+			profile.account_id = account_id;
+			profile.competence_id = competence_id;
+			
+			profiles.put(id, profile);
+		}
+		
+		stmt.close();
+	}
+	
+	private static void migrateAccounts() throws SQLException {
+		String newAccSql = "INSERT INTO account " +
+				"(firstname, lastname, email, username, password, acc_role) " +
+				"VALUES(?, ?, ?, ?, ?, ?)";
+		PreparedStatement newAccStmt = newConn.prepareStatement(newAccSql);
+		
+		newAccStmt.close();
+	}
+	
+	private static void migrateApplications() throws SQLException {
+		
 	}
 	
 	private static void parseLegacySqlScript() throws IOException {
