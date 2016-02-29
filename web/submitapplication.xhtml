@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+	  xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+	<h:body>
+		<ui:composition template="layout.xhtml">
+			<ui:define name="content">
+				<div>
+					<div>
+						New application
+					</div>
+					<h:form>
+						<p class="applicationInput">
+							<p>From (yyyy-MM-dd)</p>
+
+							<h:inputText id="from" value="#{myView.af.from}"/>
+							<p><h:messages class="inputError" for="from" /></p>
+						</p>
+						<p class="applicationInput">
+							<p>To (yyyy-MM-dd)</p>
+							<h:inputText id="to" value="#{myView.af.to}"/>
+							<p><h:messages class="inputError" for="to" /></p>
+						</p>
+						<p>
+							<h:commandButton value="Add availability" action="#{myView.addAvailability()}" />
+						</p>
+						<p class="applicationInput">
+							<p>Competence</p>
+							<h:inputText id="competence" value="#{myView.cpf.competence}"/>
+							<p><h:messages class="inputError" for="competence" /></p>
+						</p>
+						<p class="applicationInput">
+							<p>Years of experience</p>
+							<h:inputText id="yoe" value="#{myView.cpf.yearsOfExperience}"/>
+							<p><h:messages class="inputError" for="yoe" /></p>
+						</p>
+						<p>
+							<h:commandButton value="Add competence" action="#{myView.addCompetenceProfile()}" />
+						</p>
+						<p>
+							<h:commandButton value="Submit application" action="#{myView.submitApplication()}" />
+						</p>
+						<h:outputLabel for="submitMessage" rendered="#{myView.formMessage != null}"/>
+						<h:outputText id="submitMessage" value="#{myView.formMessage}" style="white-space: pre-wrap"/>
+					</h:form>
+					
+				</div>
+			</ui:define>
+		</ui:composition>
+
+	</h:body>
+</html>
