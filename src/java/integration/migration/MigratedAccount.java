@@ -1,6 +1,6 @@
 package integration.migration;
 
-public class MigratedAccount
+class MigratedAccount
 {
 	String firstName;
 	String lastName;
@@ -11,6 +11,4 @@ public class MigratedAccount
 	String password;
 	
 	String acc_role;
-	
-	long appl_id;
 }

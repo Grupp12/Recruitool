@@ -2,10 +2,12 @@ package integration.migration;
 
 import java.sql.Date;
 
-public class MigratedAvailability
+class MigratedAvailability
 {
 	long id;
 	
 	Date fromDate;
 	Date toDate;
+	
+	long appl_id;
 }

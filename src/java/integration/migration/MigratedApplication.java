@@ -9,4 +9,6 @@ class MigratedApplication
 	String appl_status;
 	
 	Timestamp timeOfReg;
+	
+	String acc_id;
 }
