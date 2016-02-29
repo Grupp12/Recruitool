@@ -15,8 +15,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import model.application.SimpleDate;
 
 import security.Crypto;
 
@@ -29,8 +28,6 @@ public class DatabaseMigrator {
 	private DatabaseMigrator() {
 	}
 	
-	private static final Logger logger = Logger.getLogger(DatabaseMigrator.class.getName());
-	
 	public static void main(String[] args) {
 		migrate();
 	}
@@ -42,49 +39,50 @@ public class DatabaseMigrator {
 	private static HashMap<Long, String> competences = new HashMap<>();
 	
 	// Legacy objects
-	private static HashMap<Long, LegacyAccount> accounts = new HashMap<>();
-	private static HashMap<Long, LegacyAvailability> availabilities = new HashMap<>();
-	private static HashMap<Long, LegacyCompetenceProfile> profiles = new HashMap<>();
+	private static HashMap<Long, LegacyAccount> oldAccounts = new HashMap<>();
+	private static HashMap<Long, LegacyAvailability> oldAvailabilities = new HashMap<>();
+	private static HashMap<Long, LegacyCompetenceProfile> oldProfiles = new HashMap<>();
 	
 	private static void migrate() {
 		try {
 			oldConn = DriverManager.getConnection("jdbc:derby:memory:mig_db;create=true");
 			parseLegacySqlScript();
-			logger.log(Level.INFO, "Legacy database created!");
+			System.out.println("Legacy database created!");
 
 			newConn = DriverManager.getConnection("jdbc:derby://localhost:1527/recruitool;user=root;password=1234");
-			logger.log(Level.INFO, "Connected to new database!");
+			System.out.println("Connected to new database!");
 
 			loadLegacyTables();
 			oldConn.close();
 
 			migrateAccounts();
 			migrateApplications();
+			migrateAvailabilites();
 			
 			newConn.close();
 
-			logger.log(Level.INFO, "Database migration completed!");
+			System.out.println("Database migration completed!");
 		}
 		catch (SQLException | IOException ex) {
-			logger.log(Level.SEVERE, ex.getMessage());
+			ex.printStackTrace();
 		}
 	}
 	
 	private static void loadLegacyTables() throws SQLException {
 		loadRoles();
-		logger.log(Level.INFO, "{0} roles loaded.", roles.size());
+		System.out.printf("%d roles loaded.\n", roles.size());
 
 		loadAccounts();
-		logger.log(Level.INFO, "{0} accounts loaded.", accounts.size());
+		System.out.printf("%d accounts loaded.\n", oldAccounts.size());
 		
 		loadAvailabilities();
-		logger.log(Level.INFO, "{0} availabilities loaded.", availabilities.size());
+		System.out.printf("%d availabilities loaded.\n", oldAvailabilities.size());
 		
 		loadCompetences();
-		logger.log(Level.INFO, "{0} competences loaded.", competences.size());
+		System.out.printf("%d competences loaded.\n", competences.size());
 		
 		loadCompetenceProfiles();
-		logger.log(Level.INFO, "{0} competence profiles loaded.", competences.size());
+		System.out.printf("%d competence profiles loaded.\n", competences.size());
 	}
 	
 	private static void loadRoles() throws SQLException {
@@ -153,7 +151,7 @@ public class DatabaseMigrator {
 			
 			account.role_id = role_id;
 			
-			accounts.put(id, account);
+			oldAccounts.put(id, account);
 		}
 		
 		stmt.close();
@@ -182,7 +180,7 @@ public class DatabaseMigrator {
 			
 			availability.account_id = account_id;
 			
-			availabilities.put(id, availability);
+			oldAvailabilities.put(id, availability);
 		}
 		
 		stmt.close();
@@ -196,7 +194,7 @@ public class DatabaseMigrator {
 		{
 			long id = rs.getLong("competence_id");
 			
-			String name = rs.getString("name").toUpperCase();
+			String name = rs.getString("name");
 			
 			competences.put(id, name);
 		}
@@ -227,29 +225,29 @@ public class DatabaseMigrator {
 			profile.account_id = account_id;
 			profile.competence_id = competence_id;
 			
-			profiles.put(id, profile);
+			oldProfiles.put(id, profile);
 		}
 		
 		stmt.close();
 	}
 	
 	private static void migrateAccounts() throws SQLException {
-		String newAccSql = "INSERT INTO account " +
-				"(firstname, lastname, email, username, password, acc_role) " +
-				"VALUES(?, ?, ?, ?, ?, ?)";
+		String newAccSql = "insert into " +
+				"ACCOUNT(FIRSTNAME, LASTNAME, EMAIL, USERNAME, PASSWORD, ACC_ROLE) " +
+				"values(?, ?, ?, ?, ?, ?)";
 		PreparedStatement newAccStmt = newConn.prepareStatement(newAccSql);
 		
-		for (LegacyAccount account : accounts.values())
+		for (LegacyAccount oldAcc : oldAccounts.values())
 		{
-			newAccStmt.setString(1, account.firstName);
-			newAccStmt.setString(2, account.lastName);
+			newAccStmt.setString(1, oldAcc.firstName);
+			newAccStmt.setString(2, oldAcc.lastName);
 			
-			newAccStmt.setString(3, account.email);
+			newAccStmt.setString(3, oldAcc.email);
 			
-			newAccStmt.setString(4, account.username);
-			newAccStmt.setString(5, account.password);
+			newAccStmt.setString(4, oldAcc.username);
+			newAccStmt.setString(5, oldAcc.password);
 			
-			String acc_role = roles.get(account.role_id);
+			String acc_role = roles.get(oldAcc.role_id);
 			newAccStmt.setString(6, acc_role);
 			
 			newAccStmt.execute();
@@ -259,7 +257,70 @@ public class DatabaseMigrator {
 	}
 	
 	private static void migrateApplications() throws SQLException {
+		String newApplSql = "insert into " +
+				"APPLICATION(APPL_STATUS, TIME_OF_REG, ACC_ID) " +
+				"values(?, ?, ?)";
+		PreparedStatement newApplStmt = newConn.prepareStatement(newApplSql);
 		
+		for (LegacyAccount acc : oldAccounts.values())
+		{
+			// Recruiters does not have applications
+			if (roles.get(acc.role_id).equals("RECRUITER"))
+				continue;
+			
+			newApplStmt.setString(1, "SUBMITTED");
+			newApplStmt.setDate(2, new SimpleDate());
+			
+			newApplStmt.setString(3, acc.username);
+			
+			newApplStmt.execute();
+		}
+		
+		newApplStmt.close();
+	}
+	private static MigratedApplication getMigratedApplication(String accUsername) throws SQLException {
+		String getApplSql = "select * from APPLICATION where ACC_ID=?";
+		try (PreparedStatement getApplStmt = newConn.prepareStatement(getApplSql))
+		{
+			getApplStmt.setString(1, accUsername);
+
+			ResultSet rs = getApplStmt.executeQuery();
+			if (!rs.next())
+				return null;
+			
+			MigratedApplication appl = new MigratedApplication();
+			
+			appl.id = rs.getLong("ID");
+			
+			appl.appl_status = rs.getString("APPL_STATUS");
+			appl.timeOfReg = rs.getTimestamp("TIME_OF_REG");
+			
+			appl.acc_id = rs.getString("ACC_ID");
+			
+			return appl;
+		}
+	}
+	
+	private static void migrateAvailabilites() throws SQLException {
+		String newAvailSql = "insert into " +
+				"AVAILABILITY(FROM_DATE, TO_DATE, APPL_ID) " +
+				"values(?, ?, ?)";
+		try (PreparedStatement newAvailStmt = newConn.prepareStatement(newAvailSql))
+		{
+			for (LegacyAvailability avail : oldAvailabilities.values())
+			{
+				LegacyAccount acc = oldAccounts.get(avail.account_id);
+				
+				MigratedApplication appl = getMigratedApplication(acc.username);
+				
+				newAvailStmt.setDate(1, avail.fromDate);
+				newAvailStmt.setDate(2, avail.toDate);
+				
+				newAvailStmt.setLong(3, appl.id);
+				
+				newAvailStmt.execute();
+			}
+		}
 	}
 	
 	private static void parseLegacySqlScript() throws IOException {
@@ -277,7 +338,7 @@ public class DatabaseMigrator {
 					stmt.execute(statement.toString());
 					stmt.close();
 				} catch (SQLException ex) {
-					logger.log(Level.SEVERE, null, ex);
+					ex.printStackTrace();
 				} finally {
 					statement = new StringBuilder();
 				}
