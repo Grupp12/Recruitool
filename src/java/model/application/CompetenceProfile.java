@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 /**
@@ -31,6 +32,10 @@ public class CompetenceProfile implements Serializable {
 	
 	@Column(name = "YEARS_OF_EXP")
 	private int yearsOfExperience;
+	
+	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.ALL }, optional = false)
+	@JoinColumn(name = "APPL_ID")
+	private Application application;
 	
 	protected CompetenceProfile() {
 	}

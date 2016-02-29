@@ -2,11 +2,16 @@ package model.application;
 
 import java.io.Serializable;
 import java.sql.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 /**
  * Contains information about an applicant's
@@ -26,6 +31,10 @@ public class Availability implements Serializable {
 	
 	@Column(name = "TO_DATE")
 	private Date to;
+	
+	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.ALL }, optional = false)
+	@JoinColumn(name = "APPL_ID")
+	private Application application;
 	
 	protected Availability() {
 	}
