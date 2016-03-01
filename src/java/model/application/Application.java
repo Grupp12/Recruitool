@@ -3,6 +3,7 @@ package model.application;
 import model.account.Account;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -28,29 +29,37 @@ public class Application implements Serializable {
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "APPL_ID")
+	@Column(name = "ID")
 	private long id;
 
 	@OneToOne(fetch = FetchType.LAZY, optional = false,
 			mappedBy = "application", targetEntity = Account.class)
 	private Account account;
 	
-	@OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.ALL }, optional = false)
-	private Availability availability;
-	
-	private Timestamp timeOfRegistration;
-	
 	@OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
 	@JoinTable(
 			name = "APPL_COMP",
 			joinColumns = {
-				@JoinColumn(name = "APPL_ID", referencedColumnName = "APPL_ID")},
+				@JoinColumn(name = "APPL_ID", referencedColumnName = "ID")},
 			inverseJoinColumns = {
-				@JoinColumn(name = "COMP_ID", referencedColumnName = "COMP_ID", unique = true)}
+				@JoinColumn(name = "COMP_ID", referencedColumnName = "ID", unique = true)}
 	)
 	private List<CompetenceProfile> competences;
 	
-	@Column(name = "APP_STATUS")
+	@OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.ALL }, optional = false)
+	@JoinTable(
+			name = "APPL_AVAIL",
+			joinColumns = {
+				@JoinColumn(name = "APPL_ID", referencedColumnName = "ID")},
+			inverseJoinColumns = {
+				@JoinColumn(name = "AVAIL_ID", referencedColumnName = "ID", unique = true)}
+	)
+	private List<Availability> availabilities;
+	
+	@Column(name = "TIME_OF_REG")
+	private Timestamp timeOfRegistration;
+	
+	@Column(name = "APPL_STATUS")
 	@Enumerated(EnumType.STRING)
 	private ApplicationStatus status;
 	
@@ -61,31 +70,35 @@ public class Application implements Serializable {
 	 * Creates a new {@code Application} submitted by an applicant.
 	 * 
 	 * @param account the applicant's account.
-	 * @param availability the applicant's availability period.
-	 * @param competences the applicant's competences.
 	 */
-	public Application(Account account, Availability availability, List<CompetenceProfile> competences) {
+	public Application(Account account) {
 		this.account = account;
 		
-		this.availability = availability;
-		
-		this.timeOfRegistration = new SimpleDate();
-		
-		this.competences = competences;
+		competences = new ArrayList<>();
+		availabilities = new ArrayList<>();
 		
 		status = ApplicationStatus.SUBMITTED;
 	}
 	
-	public Availability getAvailability() {
-		return availability;
+	public void setCompetences(List<CompetenceProfile> competences) {
+		this.competences = new ArrayList<>(competences);
+	}
+	public CompetenceProfile[] getCompetences() {
+		return competences.toArray(new CompetenceProfile[0]);
 	}
 	
+	public void setAvailabilities(List<Availability> availabilites) {
+		this.availabilities = new ArrayList<>(availabilities);
+	}
+	public Availability[] getAvailabilities() {
+		return availabilities.toArray(new Availability[0]);
+	}
+	
+	public void setTimeOfRegistration(Timestamp time) {
+		this.timeOfRegistration = time;
+	}
 	public Timestamp getTimeOfRegistration() {
 		return timeOfRegistration;
-	}
-	
-	public List<CompetenceProfile> getCompetences() {
-		return competences;
 	}
 	
 	public void setStatus(ApplicationStatus status) {
@@ -122,13 +135,24 @@ public class Application implements Serializable {
 	@Override
 	public String toString() {
 		StringBuilder output = new StringBuilder("Application[ ");
-		output.append(String.format("account=%s, availability=%s", account, availability));
+		
+		output.append(String.format("account=%s", account));
+		
 		output.append(", competences={ ");
 		for (CompetenceProfile competence : competences) {
 			output.append("\n\t");
 			output.append(competence.toString());
 		}
-		output.append(" } ]");
+		output.append(" }");
+		
+		output.append(", availabilities={ ");
+		for (Availability availability : availabilities) {
+			output.append("\n\t");
+			output.append(availability.toString());
+		}
+		output.append(" }");
+		
+		output.append(" ]");
 		return output.toString();
 	}
 }
