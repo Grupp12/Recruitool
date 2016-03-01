@@ -19,6 +19,12 @@ public class View implements Serializable {
 	
 	private RegisterForm registerForm = new RegisterForm();
 	
+	private ApplicationForm applicationForm = new ApplicationForm();
+	
+	private CompetenceProfileForm cpf = new CompetenceProfileForm();
+	
+	private AvailabilityForm af = new AvailabilityForm();
+	
 	private String formMessage;
 	
 	/**
@@ -29,9 +35,19 @@ public class View implements Serializable {
 	public RegisterForm getRegisterForm() {
 		return registerForm;
 	}
+
+	public CompetenceProfileForm getCpf() {
+		return cpf;
+	}
+
+	public AvailabilityForm getAf() {
+		return af;
+	}
 	
 	/**
 	 * Registers a new account with the data currently in the register form.
+	 * @return string(result) with value unhandledError if error occurred else
+	 * a empty string. Error page will be shown if return value is unhandledError.
 	 */
 	public String register() {
 		String result = "";
@@ -47,6 +63,41 @@ public class View implements Serializable {
 			result = handleException(ex);
 		}
 		return result;
+	}
+	
+	/**
+	 * Add a new competence profile to the application.
+	 */
+	public void addCompetenceProfile() {
+		applicationForm.addCompetenceProfileForm(cpf);
+		// Reset the form
+		cpf = new CompetenceProfileForm();
+		showApplicationStatus();
+	}
+	
+	/**
+	 * Add a new availability to the application.
+	 */
+	public void addAvailability() {
+		applicationForm.addAvailabilityForm(af);
+		// Reset the form
+		af =  new AvailabilityForm();
+		showApplicationStatus();
+	}
+	
+	private void showApplicationStatus() {
+		formMessage = "";
+		for (AvailabilityForm avF : applicationForm.getAvailabilities()){
+			formMessage += "Availability: " + avF.getFrom() + " - " + avF.getTo() + "\n";
+		}
+		for (CompetenceProfileForm compF : applicationForm.getCompetences()){
+			formMessage += "CompetenceProfile: " + compF.getCompetence() + ", years of experience: " + compF.getYearsOfExperience() + "\n";
+		}
+	}
+	
+	public void submitApplication() {
+		formMessage = "Not working";
+		applicationForm = new ApplicationForm();
 	}
 	
 	private String handleException (Throwable ex) {
