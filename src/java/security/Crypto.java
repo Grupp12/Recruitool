@@ -17,7 +17,7 @@ public class Crypto {
 	private Crypto() {
 	}
 	
-	private static final String ALGORITHM = "PBKDF2WithHmacSHA1";
+	private static final String ALGORITHM = "PBKDF2WithHmacSHA1"; 
 	private static final int ITERATIONS = 1000;
 	private static final int KEY_LENGTH = 1024;
 	private static final int SALT_LENGTH = 64;
