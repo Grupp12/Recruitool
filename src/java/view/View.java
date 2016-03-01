@@ -5,6 +5,11 @@ import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import javax.ejb.EJB;
+import integration.EntityExistsException;
+import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import model.Account;
 
 /**
  * View class to be used by JSF. Handles basic view logic and calls the 
@@ -16,7 +21,15 @@ public class View implements Serializable {
 	@EJB
 	private Controller controller;
 	
+	private Account account;
+	
 	private RegisterForm registerForm = new RegisterForm();
+	
+	private ApplicationForm applicationForm = new ApplicationForm();
+	
+	private CompetenceProfileForm cpf = new CompetenceProfileForm();
+	
+	private AvailabilityForm af = new AvailabilityForm();
 	
 	private String formMessage;
 	
@@ -28,22 +41,88 @@ public class View implements Serializable {
 	public RegisterForm getRegisterForm() {
 		return registerForm;
 	}
+
+	public CompetenceProfileForm getCpf() {
+		return cpf;
+	}
+
+	public AvailabilityForm getAf() {
+		return af;
+	}
 	
 	/**
 	 * Registers a new account with the data currently in the register form.
+	 * @return string(result) with value unhandledError if error occurred else
+	 * a empty string. Error page will be shown if return value is unhandledError.
 	 */
-	public void register() {
+	public String register() {
+		String result;
 		formMessage = null;
 		try {
-			controller.register(registerForm);
+			account = controller.register(registerForm);
+			result = "submitapplication";
 			
 			// Reset the form
 			registerForm = new RegisterForm();
 			
 			formMessage = "Your account has been created!";
-		} catch (Exception ex) {
+		} catch (Throwable ex) {
+			result = handleException(ex);
+		}
+		return result;
+	}
+	
+	/**
+	 * Add a new competence profile to the application.
+	 */
+	public void addCompetenceProfile() {
+		applicationForm.addCompetenceProfileForm(cpf);
+		// Reset the form
+		cpf = new CompetenceProfileForm();
+		showApplicationStatus();
+	}
+	
+	/**
+	 * Add a new availability to the application.
+	 */
+	public void addAvailability() {
+		applicationForm.addAvailabilityForm(af);
+		// Reset the form
+		af =  new AvailabilityForm();
+		showApplicationStatus();
+	}
+	
+	private void showApplicationStatus() {
+		formMessage = "";
+		for (AvailabilityForm avF : applicationForm.getAvailabilities()){
+			formMessage += "Availability: " + avF.getFrom() + " - " + avF.getTo() + "\n";
+		}
+		for (CompetenceProfileForm compF : applicationForm.getCompetences()){
+			formMessage += "CompetenceProfile: " + compF.getCompetence() + ", years of experience: " + compF.getYearsOfExperience() + "\n";
+		}
+	}
+	
+	public void submitApplication() {
+		try {
+			controller.submitApplication(applicationForm, account);
+			formMessage = "Application submitted";
+		} catch (ParseException ex) {
+			Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+			formMessage = "Wrong date format";
+		}
+		applicationForm = new ApplicationForm();
+	}
+	
+	private String handleException (Throwable ex) {
+		String errorMessage = "";
+		if(ex instanceof EntityExistsException) {
 			formMessage = ex.getMessage();
 		}
+		else {
+			errorMessage = "unhandledError";
+		}
+		
+		return errorMessage;
 	}
 	
 	/**

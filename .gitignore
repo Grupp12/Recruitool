@@ -48,11 +48,8 @@ Temporary Items
 /build/
 
 # Private files
-/nbproject/private/
-/nbproject/project.properties
+nbproject/private/
 nbproject/project.properties
-nbproject/build-impl.xml
-nbproject/project.xml
 nbproject/build-impl.xml
 nbproject/project.xml
 derby.log
