@@ -17,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
 
 /**
  * Contains information about one application
@@ -31,22 +32,27 @@ public class Application implements Serializable {
 	@Column(name = "ID")
 	private long id;
 
+	@NotNull
 	@OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.ALL },
 			optional = false)
 	@JoinColumn(name = "ACC_ID")
 	private Account account;
-	
+
+	@NotNull
 	@OneToMany(mappedBy = "application",
 			fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
 	private List<CompetenceProfile> competences;
 	
+	@NotNull
 	@OneToMany(mappedBy = "application",
 			fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
 	private List<Availability> availabilities;
 	
+	@NotNull
 	@Column(name = "TIME_OF_REG")
 	private Timestamp timeOfRegistration;
 	
+	@NotNull
 	@Column(name = "APPL_STATUS")
 	@Enumerated(EnumType.STRING)
 	private ApplicationStatus status;
@@ -69,14 +75,20 @@ public class Application implements Serializable {
 	}
 	
 	public void setCompetences(List<CompetenceProfile> competences) {
-		this.competences = new ArrayList<>(competences);
+		this.competences = competences;
+		for (CompetenceProfile competence : this.competences) {
+			competence.setApplication(this);
+		}
 	}
 	public CompetenceProfile[] getCompetences() {
 		return competences.toArray(new CompetenceProfile[0]);
 	}
 	
-	public void setAvailabilities(List<Availability> availabilites) {
-		this.availabilities = new ArrayList<>(availabilities);
+	public void setAvailabilities(List<Availability> availabilities) {
+		this.availabilities = availabilities;
+		for (Availability avail : this.availabilities) {
+			avail.setApplication(this);
+		}
 	}
 	public Availability[] getAvailabilities() {
 		return availabilities.toArray(new Availability[0]);

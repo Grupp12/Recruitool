@@ -16,7 +16,7 @@ public class AccountDao {
 
 	@PersistenceContext(unitName = "RecruitoolPU")
 	EntityManager em;
-
+	
 	/**
 	 * Persist account to database through JPA
 	 *
@@ -40,5 +40,9 @@ public class AccountDao {
 			
 			throw new ValidationException(violationsStr.toString());
 		}
+	}
+	
+	public Account getAccount(String username) {
+		return em.find(Account.class, username);
 	}
 }

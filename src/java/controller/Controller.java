@@ -59,7 +59,10 @@ public class Controller {
 		for (CompetenceProfileForm compF : applicationForm.getCompetences()){
 			double dYoe = Double.parseDouble(compF.getYearsOfExperience());
 			BigDecimal yoe = BigDecimal.valueOf(dYoe);
-			competences.add(new CompetenceProfile(new Competence(compF.getCompetence()), yoe));
+			
+			Competence comp = applicationDao.getCompetence(compF.getCompetence());
+			
+			competences.add(new CompetenceProfile(comp, yoe));
 		}
 		
 		app.setAvailabilities(availabilities);
