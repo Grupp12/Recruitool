@@ -6,8 +6,8 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import model.application.Application;
-import model.application.Competence;
+import model.Application;
+import model.Competence;
 
 @Stateless
 public class ApplicationDao {

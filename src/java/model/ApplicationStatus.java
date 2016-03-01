@@ -1,4 +1,4 @@
-package model.application;
+package model;
 
 /**
  * Enum for application status.

@@ -1,4 +1,4 @@
-package model.account;
+package model;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -19,10 +19,7 @@ import javax.validation.ValidatorFactory;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import model.application.Application;
 import model.ValidationException;
-import model.application.Availability;
-import model.application.CompetenceProfile;
 import security.Crypto;
 import view.RegisterFormDTO;
 
@@ -65,7 +62,7 @@ public class Account implements Serializable {
 	@Column(name = "ACC_ROLE")
 	private Role role;
 
-	@OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.ALL }, optional = true,
+	@OneToOne(fetch = FetchType.LAZY, /*cascade = { CascadeType.ALL },*/ optional = true,
 			mappedBy = "account", targetEntity = Application.class)
 	private Application application;
 	
@@ -89,11 +86,13 @@ public class Account implements Serializable {
 		this.role = Role.APPLICANT;
 	}
 
-	public void createApplication(List<CompetenceProfile> competences, List<Availability> availabilities) {
+	public Application createApplication(List<CompetenceProfile> competences, List<Availability> availabilities) {
 		application = new Application(this);
 		application.setAvailabilities(availabilities);
 		application.setCompetences(competences);
 		application.setTimeOfRegistration(new Timestamp(System.currentTimeMillis()));
+		
+		return application;
 	}
 	
 	public String getFirstName() {
@@ -124,6 +123,9 @@ public class Account implements Serializable {
 		return role;
 	}
 	
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	public int hashCode() {
 		int hash = 0;
@@ -131,6 +133,9 @@ public class Account implements Serializable {
 		return hash;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	public boolean equals(Object object) {
 		if (!(object instanceof Account)) {
@@ -142,6 +147,9 @@ public class Account implements Serializable {
 		return username.equals(other.username);
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	public String toString() {
 		return String.format("User[ firstName=%s, lastName=%s ]", firstName, lastName);

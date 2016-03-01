@@ -1,6 +1,6 @@
-package model.application;
+package model;
 
-import model.account.Account;
+import model.Account;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -33,8 +33,7 @@ public class Application implements Serializable {
 	private long id;
 
 	@NotNull
-	@OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.ALL },
-			optional = false)
+	@OneToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "ACC_ID")
 	private Account account;
 
@@ -65,7 +64,7 @@ public class Application implements Serializable {
 	 * 
 	 * @param account the applicant's account.
 	 */
-	public Application(Account account) {
+	Application(Account account) {
 		this.account = account;
 		
 		competences = new ArrayList<>();
@@ -80,8 +79,8 @@ public class Application implements Serializable {
 			competence.setApplication(this);
 		}
 	}
-	public CompetenceProfile[] getCompetences() {
-		return competences.toArray(new CompetenceProfile[0]);
+	public List<CompetenceProfile> getCompetences() {
+		return competences;
 	}
 	
 	public void setAvailabilities(List<Availability> availabilities) {
@@ -90,8 +89,8 @@ public class Application implements Serializable {
 			avail.setApplication(this);
 		}
 	}
-	public Availability[] getAvailabilities() {
-		return availabilities.toArray(new Availability[0]);
+	public List<Availability> getAvailabilities() {
+		return availabilities;
 	}
 	
 	public void setTimeOfRegistration(Timestamp time) {

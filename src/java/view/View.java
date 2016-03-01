@@ -9,6 +9,7 @@ import integration.EntityExistsException;
 import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Account;
 
 /**
  * View class to be used by JSF. Handles basic view logic and calls the 
@@ -19,6 +20,8 @@ import java.util.logging.Logger;
 public class View implements Serializable {
 	@EJB
 	private Controller controller;
+	
+	private Account account;
 	
 	private RegisterForm registerForm = new RegisterForm();
 	
@@ -53,10 +56,11 @@ public class View implements Serializable {
 	 * a empty string. Error page will be shown if return value is unhandledError.
 	 */
 	public String register() {
-		String result = "";
+		String result;
 		formMessage = null;
 		try {
-			controller.register(registerForm);
+			account = controller.register(registerForm);
+			result = "submitapplication";
 			
 			// Reset the form
 			registerForm = new RegisterForm();
@@ -99,14 +103,14 @@ public class View implements Serializable {
 	}
 	
 	public void submitApplication() {
-		formMessage = "Not working";
 		try {
-			controller.submitApplication(applicationForm, null);
+			controller.submitApplication(applicationForm, account);
+			formMessage = "Application submitted";
 		} catch (ParseException ex) {
 			Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+			formMessage = "Wrong date format";
 		}
 		applicationForm = new ApplicationForm();
-		
 	}
 	
 	private String handleException (Throwable ex) {

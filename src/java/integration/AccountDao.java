@@ -6,7 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import model.account.Account;
+import model.Account;
 
 /**
  * DAO for handling Accounts in the database using JPA

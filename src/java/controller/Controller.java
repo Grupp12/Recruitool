@@ -11,12 +11,12 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
-import model.account.Account;
-import model.application.Application;
-import model.application.Availability;
-import model.application.Competence;
-import model.application.CompetenceProfile;
-import model.application.SimpleDate;
+import model.Account;
+import model.Application;
+import model.Availability;
+import model.Competence;
+import model.CompetenceProfile;
+import model.SimpleDate;
 import view.ApplicationFormDTO;
 import view.AvailabilityForm;
 import view.CompetenceProfileForm;
@@ -41,15 +41,15 @@ public class Controller {
 	 * @throws ValidationException if account data is invalid.
 	 * @throws EntityExistsException if account already exists.
 	 */
-	public void register(RegisterFormDTO registerForm) throws ValidationException, EntityExistsException {
+	public Account register(RegisterFormDTO registerForm) throws ValidationException, EntityExistsException {
 		Account acc = new Account(registerForm);
 		
 		accountDao.persistAccount(acc);
+		
+		return acc;
 	}
 	
 	public void submitApplication(ApplicationFormDTO applicationForm, Account account) throws ParseException {
-		Application app = new Application(account);
-		
 		List<CompetenceProfile> competences = new ArrayList();
 		List<Availability> availabilities = new ArrayList();
 		
@@ -65,10 +65,7 @@ public class Controller {
 			competences.add(new CompetenceProfile(comp, yoe));
 		}
 		
-		app.setAvailabilities(availabilities);
-		app.setCompetences(competences);
-		app.setTimeOfRegistration(new Timestamp(System.currentTimeMillis()));
-		
-		applicationDao.persistApplication(app);
+		Application appl = account.createApplication(competences, availabilities);
+		applicationDao.persistApplication(appl);
 	}
 }
