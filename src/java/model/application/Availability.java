@@ -11,7 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 
 /**
  * Contains information about an applicant's
@@ -26,12 +26,15 @@ public class Availability implements Serializable {
 	@Column(name = "ID")
 	private long id;
 	
+	@NotNull
 	@Column(name = "FROM_DATE")
 	private Date from;
 	
+	@NotNull
 	@Column(name = "TO_DATE")
 	private Date to;
 	
+	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.ALL }, optional = false)
 	@JoinColumn(name = "APPL_ID")
 	private Application application;
@@ -57,6 +60,10 @@ public class Availability implements Serializable {
 	
 	public Date getTo() {
 		return to;
+	}
+	
+	void setApplication(Application appl) {
+		this.application = appl;
 	}
 
 	/**

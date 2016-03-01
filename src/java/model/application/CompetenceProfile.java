@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
 
 /**
  * Contains information about an applicant's
@@ -26,14 +27,17 @@ public class CompetenceProfile implements Serializable {
 	@Column(name = "ID")
 	private long id;
 
+	@NotNull
 	@OneToOne(fetch = FetchType.LAZY, optional = false,
 			cascade = { CascadeType.PERSIST, CascadeType.REFRESH })
 	@JoinColumn(name = "COMP_ID")
 	private Competence competence;
 	
+	@NotNull
 	@Column(name = "YEARS_OF_EXP", precision = 4, scale = 2)
 	private BigDecimal yearsOfExperience;
 	
+	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.ALL }, optional = false)
 	@JoinColumn(name = "APPL_ID")
 	private Application application;
@@ -59,6 +63,10 @@ public class CompetenceProfile implements Serializable {
 	
 	public BigDecimal getYearsOfExperience() {
 		return yearsOfExperience;
+	}
+	
+	void setApplication(Application appl) {
+		this.application = appl;
 	}
 	
 	/**

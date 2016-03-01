@@ -6,6 +6,9 @@ import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import javax.ejb.EJB;
 import integration.EntityExistsException;
+import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * View class to be used by JSF. Handles basic view logic and calls the 
@@ -97,7 +100,13 @@ public class View implements Serializable {
 	
 	public void submitApplication() {
 		formMessage = "Not working";
+		try {
+			controller.submitApplication(applicationForm, null);
+		} catch (ParseException ex) {
+			Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+		}
 		applicationForm = new ApplicationForm();
+		
 	}
 	
 	private String handleException (Throwable ex) {
