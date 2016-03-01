@@ -1,6 +1,7 @@
 package model.account;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -9,8 +10,9 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -23,7 +25,6 @@ import model.application.Application;
 import model.ValidationException;
 import model.application.Availability;
 import model.application.CompetenceProfile;
-import model.application.SimpleDate;
 import security.Crypto;
 import view.RegisterFormDTO;
 
@@ -32,9 +33,8 @@ import view.RegisterFormDTO;
  */
 @Entity
 public class Account implements Serializable {
-
 	private static final long serialVersionUID = 1L;
-
+	
 	@NotNull
 	@Size(min = 1, message = "First Name can not be empty")
 	@Column(name = "FIRSTNAME")
@@ -67,8 +67,8 @@ public class Account implements Serializable {
 	@Column(name = "ACC_ROLE")
 	private Role role;
 
-	@OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
-	@JoinColumn(name = "APPL_ID")
+	@OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.ALL }, optional = true,
+			mappedBy = "account", targetEntity = Application.class)
 	private Application application;
 	
 	protected Account() {
@@ -95,13 +95,21 @@ public class Account implements Serializable {
 		application = new Application(this);
 		application.setAvailabilities(availabilities);
 		application.setCompetences(competences);
-		application.setTimeOfRegistration(new SimpleDate());
+		application.setTimeOfRegistration(new Timestamp(System.currentTimeMillis()));
 	}
 	
 	public String getFirstName() {
 		return firstName;
 	}
-        
+	
+	public String getLastName() {
+		return firstName;
+	}
+	
+	public String getEmail() {
+		return email;
+	}
+	
 	public String getUsername() {
 		return username;
 	}
@@ -116,9 +124,6 @@ public class Account implements Serializable {
 	
 	public Role getRole() {
 		return role;
-	}
-	public void setRole(Role role) {
-		this.role = role;
 	}
 	
 	@Override
