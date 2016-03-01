@@ -1,6 +1,7 @@
 package model.application;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 /**
@@ -26,11 +28,15 @@ public class CompetenceProfile implements Serializable {
 
 	@OneToOne(fetch = FetchType.LAZY, optional = false,
 			cascade = { CascadeType.PERSIST, CascadeType.REFRESH })
-	@JoinColumn(name = "COMP_NAME")
+	@JoinColumn(name = "COMP_ID")
 	private Competence competence;
 	
-	@Column(name = "YEARS_OF_EXP")
-	private int yearsOfExperience;
+	@Column(name = "YEARS_OF_EXP", precision = 4, scale = 2)
+	private BigDecimal yearsOfExperience;
+	
+	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.ALL }, optional = false)
+	@JoinColumn(name = "APPL_ID")
+	private Application application;
 	
 	protected CompetenceProfile() {
 	}
@@ -42,7 +48,7 @@ public class CompetenceProfile implements Serializable {
 	 * @param competence
 	 * @param yearsOfExperience 
 	 */
-	public CompetenceProfile(Competence competence, int yearsOfExperience) {
+	public CompetenceProfile(Competence competence, BigDecimal yearsOfExperience) {
 		this.competence = competence;
 		this.yearsOfExperience = yearsOfExperience;
 	}
@@ -51,7 +57,7 @@ public class CompetenceProfile implements Serializable {
 		return competence;
 	}
 	
-	public int getYearsOfExperience() {
+	public BigDecimal getYearsOfExperience() {
 		return yearsOfExperience;
 	}
 	

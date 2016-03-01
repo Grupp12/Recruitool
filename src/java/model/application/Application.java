@@ -15,7 +15,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
@@ -32,28 +31,17 @@ public class Application implements Serializable {
 	@Column(name = "ID")
 	private long id;
 
-	@OneToOne(fetch = FetchType.LAZY, optional = false,
-			mappedBy = "application", targetEntity = Account.class)
+	@OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.ALL },
+			optional = false)
+	@JoinColumn(name = "ACC_ID")
 	private Account account;
 	
-	@OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
-	@JoinTable(
-			name = "APPL_COMP",
-			joinColumns = {
-				@JoinColumn(name = "APPL_ID", referencedColumnName = "ID")},
-			inverseJoinColumns = {
-				@JoinColumn(name = "COMP_ID", referencedColumnName = "ID", unique = true)}
-	)
+	@OneToMany(mappedBy = "application",
+			fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
 	private List<CompetenceProfile> competences;
 	
-	@OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.ALL }, optional = false)
-	@JoinTable(
-			name = "APPL_AVAIL",
-			joinColumns = {
-				@JoinColumn(name = "APPL_ID", referencedColumnName = "ID")},
-			inverseJoinColumns = {
-				@JoinColumn(name = "AVAIL_ID", referencedColumnName = "ID", unique = true)}
-	)
+	@OneToMany(mappedBy = "application",
+			fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
 	private List<Availability> availabilities;
 	
 	@Column(name = "TIME_OF_REG")

@@ -1,7 +1,7 @@
 package model.application;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat;
  * {@code SimpleDate} only serves to provide useful
  * constructors for the {@code Timestamp} class.
  */
-public class SimpleDate extends Timestamp implements Serializable {
+public class SimpleDate extends Date implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	/**
