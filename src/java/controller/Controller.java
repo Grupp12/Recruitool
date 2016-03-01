@@ -4,6 +4,7 @@ import model.ValidationException;
 import integration.AccountDao;
 import integration.ApplicationDao;
 import integration.EntityExistsException;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -56,12 +57,14 @@ public class Controller {
 			availabilities.add(new Availability(new SimpleDate(avF.getFrom()), new SimpleDate(avF.getTo())));
 		}
 		for (CompetenceProfileForm compF : applicationForm.getCompetences()){
-			int yoe = Integer.parseInt(compF.getYearsOfExperience());
+			double dYoe = Double.parseDouble(compF.getYearsOfExperience());
+			BigDecimal yoe = BigDecimal.valueOf(dYoe);
 			competences.add(new CompetenceProfile(new Competence(compF.getCompetence()), yoe));
 		}
 		
 		app.setAvailabilities(availabilities);
 		app.setCompetences(competences);
+		app.setTimeOfRegistration(new Timestamp(System.currentTimeMillis()));
 		
 		applicationDao.persistApplication(app);
 	}
