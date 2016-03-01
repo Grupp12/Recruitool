@@ -1,10 +1,12 @@
 package integration.migration;
 
+import java.math.BigDecimal;
+
 class LegacyCompetenceProfile
 {
 	long id;
 	
-	int yearsOfExp;
+	BigDecimal yearsOfExp;
 	
 	long account_id;
 	

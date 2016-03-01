@@ -1,10 +1,12 @@
 package integration.migration;
 
+import java.math.BigDecimal;
+
 class MigratedCompetenceProfile
 {
 	long id;
 	
-	int yearsOfExp;
+	BigDecimal yearsOfExp;
 	
 	String comp_name;
 	
