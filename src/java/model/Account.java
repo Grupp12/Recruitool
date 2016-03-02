@@ -2,9 +2,7 @@ package model;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.List;
 import java.util.Set;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -19,7 +17,6 @@ import javax.validation.ValidatorFactory;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import model.ValidationException;
 import security.Crypto;
 import view.RegisterFormDTO;
 
@@ -55,7 +52,7 @@ public class Account implements Serializable {
 	
 	@NotNull
 	@Size(min = 1, message = "Password can not be empty")
-	@Column(name = "PASSWORD", length = 261) // Hash is always 261 chars long
+	@Column(name = "PASSWORD", length = 261)
 	private String password;
 	
 	@Enumerated(EnumType.STRING)
@@ -89,11 +86,14 @@ public class Account implements Serializable {
 		this.role = Role.APPLICANT;
 	}
 
-	public Application createApplication(List<CompetenceProfile> competences, List<Availability> availabilities) {
-		application = new Application(this);
-		application.setAvailabilities(availabilities);
-		application.setCompetences(competences);
-		application.setTimeOfRegistration(new Timestamp(System.currentTimeMillis()));
+	/**
+	 * Creates a new application for this account.
+	 * 
+	 * @param timeOfReg the time of the registration.
+	 * @return the created application.
+	 */
+	public Application createApplication(Timestamp timeOfReg) {
+		application = new Application(this, timeOfReg);
 		
 		return application;
 	}
@@ -114,6 +114,13 @@ public class Account implements Serializable {
 		return username;
 	}
 	
+	/**
+	 * Validates the password to check if it matches the
+	 * password associated with the account object.
+	 * 
+	 * @param password the password to validate.
+	 * @return true if the passwords match.
+	 */
 	public boolean validatePassword(String password) {
 		return Crypto.validateHash(password, this.password);
 	}

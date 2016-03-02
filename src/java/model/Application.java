@@ -1,7 +1,8 @@
 package model;
 
-import model.Account;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,12 +41,12 @@ public class Application implements Serializable {
 	@NotNull
 	@OneToMany(mappedBy = "application", fetch = FetchType.LAZY,
 			cascade = { CascadeType.ALL })
-	private List<CompetenceProfile> competences;
+	private List<Availability> availabilities;
 	
 	@NotNull
 	@OneToMany(mappedBy = "application", fetch = FetchType.LAZY,
 			cascade = { CascadeType.ALL })
-	private List<Availability> availabilities;
+	private List<CompetenceProfile> competences;
 	
 	@NotNull
 	@Column(name = "TIME_OF_REG")
@@ -63,39 +64,60 @@ public class Application implements Serializable {
 	 * Creates a new {@code Application} submitted by an applicant.
 	 * 
 	 * @param account the applicant's account.
+	 * @param timeOfReg the time of registration.
 	 */
-	Application(Account account) {
+	Application(Account account, Timestamp timeOfReg) {
 		this.account = account;
 		
-		competences = new ArrayList<>();
-		availabilities = new ArrayList<>();
+		this.timeOfRegistration = timeOfReg;
 		
 		status = ApplicationStatus.SUBMITTED;
 	}
 	
-	public void setCompetences(List<CompetenceProfile> competences) {
-		this.competences = competences;
-		for (CompetenceProfile competence : this.competences) {
-			competence.setApplication(this);
-		}
-	}
-	public List<CompetenceProfile> getCompetences() {
-		return competences;
+	/**
+	 * Creates a new application for this account.
+	 * 
+	 * @param from the from-date.
+	 * @param to the to-date.
+	 */
+	public void createAvailability(Date from, Date to) {
+		if (availabilities == null)
+			availabilities = new ArrayList<>();
+		
+		availabilities.add(new Availability(this, from, to));
 	}
 	
-	public void setAvailabilities(List<Availability> availabilities) {
-		this.availabilities = availabilities;
-		for (Availability avail : this.availabilities) {
-			avail.setApplication(this);
-		}
-	}
+	/**
+	 * Retrieves a list of all availabilities associated with this application.
+	 * 
+	 * @return the application's availabilities.
+	 */
 	public List<Availability> getAvailabilities() {
 		return availabilities;
 	}
 	
-	public void setTimeOfRegistration(Timestamp time) {
-		this.timeOfRegistration = time;
+	/**
+	 * Creates a new competence profile for this application.
+	 * 
+	 * @param competence the competence.
+	 * @param yearsOfExp years of experience.
+	 */
+	public void createCompetenceProfile(Competence competence, BigDecimal yearsOfExp) {
+		if (competences == null)
+			competences = new ArrayList<>();
+		
+		competences.add(new CompetenceProfile(this, competence, yearsOfExp));
 	}
+	
+	/**
+	 * Retrieves a list of all competences associated with this application.
+	 * 
+	 * @return the application's competence profiles.
+	 */
+	public List<CompetenceProfile> getCompetences() {
+		return competences;
+	}
+	
 	public Timestamp getTimeOfRegistration() {
 		return timeOfRegistration;
 	}

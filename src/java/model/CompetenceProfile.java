@@ -2,7 +2,6 @@ package model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -51,7 +50,8 @@ public class CompetenceProfile implements Serializable {
 	 * @param competence
 	 * @param yearsOfExperience 
 	 */
-	public CompetenceProfile(Competence competence, BigDecimal yearsOfExperience) {
+	CompetenceProfile(Application application, Competence competence, BigDecimal yearsOfExperience) {
+		this.application = application;
 		this.competence = competence;
 		this.yearsOfExperience = yearsOfExperience;
 	}
@@ -62,10 +62,6 @@ public class CompetenceProfile implements Serializable {
 	
 	public BigDecimal getYearsOfExperience() {
 		return yearsOfExperience;
-	}
-	
-	void setApplication(Application appl) {
-		this.application = appl;
 	}
 	
 	/**

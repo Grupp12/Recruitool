@@ -49,7 +49,7 @@ public class Availability implements Serializable {
 	 * @param from
 	 * @param to 
 	 */
-	public Availability(Date from, Date to) {
+	Availability(Application application, Date from, Date to) {
 		this.from = from;
 		this.to = to;
 	}
@@ -62,10 +62,6 @@ public class Availability implements Serializable {
 		return to;
 	}
 	
-	void setApplication(Application appl) {
-		this.application = appl;
-	}
-
 	/**
 	 * @inheritDoc
 	 */
@@ -107,5 +103,4 @@ public class Availability implements Serializable {
 		
 		return String.format("Availability[ from=%s, to=%s ]", from, to);
 	}
-	
 }
