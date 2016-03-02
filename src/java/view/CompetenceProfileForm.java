@@ -8,7 +8,7 @@ package view;
 /**
  * Holds the competence profile form values.
  */
-public class CompetenceProfileForm implements CompetenceProfileFormDTO{
+public class CompetenceProfileForm implements CompetenceProfileFormDTO {
 	private String competence;
 	private String yearsOfExperience;
 
@@ -29,5 +29,4 @@ public class CompetenceProfileForm implements CompetenceProfileFormDTO{
 	public void setYearsOfExperience(String yearsOfExperience) {
 		this.yearsOfExperience = yearsOfExperience;
 	}
-	
 }

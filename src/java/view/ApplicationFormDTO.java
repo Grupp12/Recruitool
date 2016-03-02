@@ -11,6 +11,6 @@ import java.util.List;
  * DTO in the form of an interface to the application form.
  */
 public interface ApplicationFormDTO {
-	public List<AvailabilityForm> getAvailabilities();
-	public List<CompetenceProfileForm> getCompetences();
+	public List<AvailabilityFormDTO> getAvailabilities();
+	public List<CompetenceProfileFormDTO> getCompetences();
 }
