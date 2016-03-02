@@ -22,10 +22,9 @@ import security.Crypto;
 
 /**
  * The {@code DatabaseMigrator} is a small program that is
- * used for migrating the legacy database into our new database
+ * used for migrating the legacy database into our new database.
  */
 public class DatabaseMigrator {
-	
 	private DatabaseMigrator() {
 	}
 	
@@ -58,7 +57,6 @@ public class DatabaseMigrator {
 
 			migrateAccounts();
 			migrateApplications();
-			
 			newConn.close();
 
 			System.out.println("Database migration completed!");
