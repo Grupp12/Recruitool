@@ -9,6 +9,8 @@ import integration.EntityExistsException;
 import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletResponse;
 import model.Account;
 
 /**
@@ -60,12 +62,17 @@ public class View implements Serializable {
 		formMessage = null;
 		try {
 			account = controller.register(registerForm);
-			result = "submitapplication";
+			result = "submitapplication.xhtml?faces-redirect=true";
+			
+			
 			
 			// Reset the form
 			registerForm = new RegisterForm();
 			
 			formMessage = "Your account has been created!";
+			
+			HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+			response.sendRedirect(result);
 		} catch (Throwable ex) {
 			result = handleException(ex);
 		}

@@ -133,7 +133,7 @@ public class DatabaseMigrator {
 				}
 
 				// Hash the password
-				password = Crypto.generateHash(password);
+				password = Crypto.simpleHash(password);
 
 				// Create legacy account
 				LegacyAccount account = new LegacyAccount();

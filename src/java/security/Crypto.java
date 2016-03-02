@@ -1,5 +1,8 @@
 package security;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.logging.Level;
@@ -21,6 +24,32 @@ public class Crypto {
 	private static final int ITERATIONS = 1000;
 	private static final int KEY_LENGTH = 1024;
 	private static final int SALT_LENGTH = 64;
+	
+	public static void main(String[] args) {
+		simpleHash("qwerty");
+	}
+	
+	/**
+	 * Hashing with SHA-256
+	 * 
+	 * @return hashed version of input.
+	 */
+	public static String simpleHash(String text) {
+		try {
+			MessageDigest md = MessageDigest.getInstance("SHA-256");
+			md.update(text.getBytes("UTF-8"));
+			
+			byte[] digest = md.digest();
+			String hash = String.format("%064x", new java.math.BigInteger(1, digest));
+			System.out.println("simple hash len = " + hash.length());
+			return hash;
+			
+		} catch (UnsupportedEncodingException | NoSuchAlgorithmException ex) {
+			Logger.getLogger(Crypto.class.getName()).log(Level.SEVERE, null, ex);
+			return "hashing error";
+		}
+	}
+	
 	
 	/**
 	 * Generates a hash from the input clear text.

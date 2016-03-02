@@ -81,7 +81,7 @@ public class Account implements Serializable {
 		this.email = registerForm.getEmail();
 
 		this.username = registerForm.getUsername();
-		this.password = Crypto.generateHash(registerForm.getPassword());
+		this.password = Crypto.simpleHash(registerForm.getPassword());
 		
 		this.role = Role.APPLICANT;
 	}
