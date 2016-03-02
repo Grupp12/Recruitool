@@ -1,10 +1,13 @@
 package model;
 
+import integration.ApplicationDao;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -19,8 +22,10 @@ import javax.validation.ValidatorFactory;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import model.ValidationException;
 import security.Crypto;
+import view.ApplicationFormDTO;
+import view.AvailabilityForm;
+import view.CompetenceProfileForm;
 import view.RegisterFormDTO;
 
 /**
@@ -89,13 +94,32 @@ public class Account implements Serializable {
 		this.role = Role.APPLICANT;
 	}
 
-	public Application createApplication(List<CompetenceProfile> competences, List<Availability> availabilities) {
+	/**
+	 * Creates and persists a new application for this account
+	 * @param applicationForm
+	 * @return
+	 * @throws ParseException 
+	 */
+	public void createApplication(ApplicationFormDTO applicationForm, ApplicationDao applicationDao) throws ParseException {
+		List<CompetenceProfile> competences = new ArrayList();
+		List<Availability> availabilities = new ArrayList();
+		
+		for (AvailabilityForm avF : applicationForm.getAvailabilities()){
+			availabilities.add(new Availability(new SimpleDate(avF.getFrom()), new SimpleDate(avF.getTo())));
+		}
+		for (CompetenceProfileForm compF : applicationForm.getCompetences()){
+			double dYoe = Double.parseDouble(compF.getYearsOfExperience());
+			BigDecimal yoe = BigDecimal.valueOf(dYoe);
+			
+			Competence comp = applicationDao.getCompetence(compF.getCompetence());
+			
+			competences.add(new CompetenceProfile(comp, yoe));
+		}
 		application = new Application(this);
 		application.setAvailabilities(availabilities);
 		application.setCompetences(competences);
 		application.setTimeOfRegistration(new Timestamp(System.currentTimeMillis()));
-		
-		return application;
+		applicationDao.persistApplication(application);
 	}
 	
 	public String getFirstName() {

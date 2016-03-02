@@ -60,26 +60,14 @@ public class Controller {
 	 * @throws ParseException if wrong date format.
 	 */
 	public void submitApplication(ApplicationFormDTO applicationForm, Account account) throws ParseException {
-		List<CompetenceProfile> competences = new ArrayList();
-		List<Availability> availabilities = new ArrayList();
-		
-		for (AvailabilityForm avF : applicationForm.getAvailabilities()){
-			availabilities.add(new Availability(new SimpleDate(avF.getFrom()), new SimpleDate(avF.getTo())));
-		}
-		for (CompetenceProfileForm compF : applicationForm.getCompetences()){
-			double dYoe = Double.parseDouble(compF.getYearsOfExperience());
-			BigDecimal yoe = BigDecimal.valueOf(dYoe);
-			
-			Competence comp = applicationDao.getCompetence(compF.getCompetence());
-			
-			competences.add(new CompetenceProfile(comp, yoe));
-		}
-		
-		Application appl = account.createApplication(competences, availabilities);
-		applicationDao.persistApplication(appl);
+		account.createApplication(applicationForm, applicationDao);
 	}
 	
 	public List<Competence> getAllCompetences() {
 		return applicationDao.getAllCompetences();
+	}
+
+	public Account retrieveAccount(String currentUser) {
+		return accountDao.getAccount(currentUser);
 	}
 }
