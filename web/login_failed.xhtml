@@ -3,21 +3,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
 	  xmlns:components="http://java.sun.com/jsf/composite/components"
+	  xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
 	  xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 	<h:body>
 		<ui:composition template="layout.xhtml">
 			<ui:define name="content">
-				<div id="loginForm">
-					<div class="header">
-						Register
-					</div>
-					<form method="POST" action="j_security_check">
-						<input type="text" name="j_username"/>
-						<input type="password" name="j_password"/>
-						<input type="submit" value="Submit"/>
-					</form> 
-				</div>
+				<p> Incorrect login credentials or restricted access </p>
 			</ui:define>
 		</ui:composition>
+
 	</h:body>
 </html>
