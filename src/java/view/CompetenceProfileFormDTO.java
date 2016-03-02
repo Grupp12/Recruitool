@@ -6,8 +6,7 @@
 package view;
 
 /**
- *
- * @author Simon Ciesluk
+ * DTO in the form of an interface to the competence profile form.
  */
 public interface CompetenceProfileFormDTO {
 	public String getCompetence();

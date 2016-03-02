@@ -51,6 +51,13 @@ public class Controller {
 		return acc;
 	}
 	
+	/**
+	 * Create a new application.
+	 * 
+	 * @param applicationForm the application info.
+	 * @param account the account associated with the application. 
+	 * @throws ParseException if wrong date format.
+	 */
 	public void submitApplication(ApplicationFormDTO applicationForm, Account account) throws ParseException {
 		List<CompetenceProfile> competences = new ArrayList();
 		List<Availability> availabilities = new ArrayList();

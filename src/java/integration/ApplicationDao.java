@@ -9,6 +9,9 @@ import javax.persistence.TypedQuery;
 import model.Application;
 import model.Competence;
 
+/**
+ * DAO for handling Applications in the database using JPA
+ */
 @Stateless
 public class ApplicationDao {
 	@PersistenceContext(unitName = "RecruitoolPU")
@@ -24,11 +27,17 @@ public class ApplicationDao {
 			persistCompetence(new Competence(compName));
 		}
 	}
-
+	
+	/**
+	 * Persist application to database through JPA
+	 */
 	public void persistApplication(Application app) {
 		em.persist(app);
 	}
 	
+	/**
+	 * Persist competence to database through JPA
+	 */
 	public void persistCompetence(Competence competence) {
 		em.persist(competence);
 	}

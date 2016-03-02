@@ -102,6 +102,10 @@ public class View implements Serializable {
 		}
 	}
 	
+	/**
+	 * Create a new application with the data currently in the application form 
+	 * and the account that is logged in.
+	 */
 	public void submitApplication() {
 		try {
 			controller.submitApplication(applicationForm, account);

@@ -5,6 +5,9 @@
  */
 package view;
 
+/**
+ * Holds the competence profile form values.
+ */
 public class CompetenceProfileForm implements CompetenceProfileFormDTO{
 	private String competence;
 	private String yearsOfExperience;
