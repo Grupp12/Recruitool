@@ -41,7 +41,7 @@
         <!-- need to create realm -->
         <form-login-config>
             <form-login-page> 				/faces/login.xhtml 			</form-login-page>
-            <form-error-page>/faces/login_error.xhtml</form-error-page>
+            <form-error-page>/faces/login_failed.xhtml</form-error-page>
         </form-login-config>
     </login-config>
     <security-role>
