@@ -11,4 +11,6 @@ class MigratedAccount
 	String password;
 	
 	String acc_role;
+	
+	String ssn;
 }

@@ -62,6 +62,9 @@ public class Account implements Serializable {
 	@Column(name = "ACC_ROLE")
 	private Role role;
 
+	@Column(name = "SSN")
+	private String ssn;
+	
 	@OneToOne(fetch = FetchType.LAZY, /*cascade = { CascadeType.ALL },*/ optional = true,
 			mappedBy = "account", targetEntity = Application.class)
 	private Application application;

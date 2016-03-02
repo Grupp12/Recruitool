@@ -226,8 +226,8 @@ public class DatabaseMigrator {
 	
 	private static void migrateAccounts() throws SQLException {
 		String newAccSql = "insert into " +
-				"ACCOUNT(FIRSTNAME, LASTNAME, EMAIL, USERNAME, PASSWORD, ACC_ROLE) " +
-				"values(?, ?, ?, ?, ?, ?)";
+				"ACCOUNT(FIRSTNAME, LASTNAME, EMAIL, USERNAME, PASSWORD, ACC_ROLE, SSN) " +
+				"values(?, ?, ?, ?, ?, ?, ?)";
 		try (PreparedStatement newAccStmt = newConn.prepareStatement(newAccSql))
 		{
 			for (LegacyAccount oldAcc : oldAccounts.values())
@@ -242,6 +242,8 @@ public class DatabaseMigrator {
 
 				String acc_role = roles.get(oldAcc.role_id);
 				newAccStmt.setString(6, acc_role);
+				
+				newAccStmt.setString(7, oldAcc.ssn);
 
 				newAccStmt.execute();
 			}
