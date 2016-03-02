@@ -25,7 +25,9 @@ import javax.validation.constraints.Size;
 import security.Crypto;
 import view.ApplicationFormDTO;
 import view.AvailabilityForm;
+import view.AvailabilityFormDTO;
 import view.CompetenceProfileForm;
+import view.CompetenceProfileFormDTO;
 import view.RegisterFormDTO;
 
 /**
@@ -101,13 +103,15 @@ public class Account implements Serializable {
 	 * @throws ParseException 
 	 */
 	public void createApplication(ApplicationFormDTO applicationForm, ApplicationDao applicationDao) throws ParseException {
+		Timestamp currentTime = new Timestamp(System.currentTimeMillis());
+		
 		List<CompetenceProfile> competences = new ArrayList();
 		List<Availability> availabilities = new ArrayList();
 		
-		for (AvailabilityForm avF : applicationForm.getAvailabilities()){
+		for (AvailabilityFormDTO avF : applicationForm.getAvailabilities()){
 			availabilities.add(new Availability(new SimpleDate(avF.getFrom()), new SimpleDate(avF.getTo())));
 		}
-		for (CompetenceProfileForm compF : applicationForm.getCompetences()){
+		for (CompetenceProfileFormDTO compF : applicationForm.getCompetences()){
 			double dYoe = Double.parseDouble(compF.getYearsOfExperience());
 			BigDecimal yoe = BigDecimal.valueOf(dYoe);
 			
