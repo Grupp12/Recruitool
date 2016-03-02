@@ -1,5 +1,8 @@
 package view;
 
+/**
+ * Holds the availability form values.
+ */
 public class AvailabilityForm implements AvailabilityFormDTO{
 	private String from;
 	private String to;

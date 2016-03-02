@@ -22,10 +22,9 @@ import security.Crypto;
 
 /**
  * The {@code DatabaseMigrator} is a small program that is
- * used for migrating the legacy database into our new database
+ * used for migrating the legacy database into our new database.
  */
 public class DatabaseMigrator {
-	
 	private DatabaseMigrator() {
 	}
 	
@@ -58,7 +57,6 @@ public class DatabaseMigrator {
 
 			migrateAccounts();
 			migrateApplications();
-			
 			newConn.close();
 
 			System.out.println("Database migration completed!");
@@ -228,8 +226,8 @@ public class DatabaseMigrator {
 	
 	private static void migrateAccounts() throws SQLException {
 		String newAccSql = "insert into " +
-				"ACCOUNT(FIRSTNAME, LASTNAME, EMAIL, USERNAME, PASSWORD, ACC_ROLE) " +
-				"values(?, ?, ?, ?, ?, ?)";
+				"ACCOUNT(FIRSTNAME, LASTNAME, EMAIL, USERNAME, PASSWORD, ACC_ROLE, SSN) " +
+				"values(?, ?, ?, ?, ?, ?, ?)";
 		try (PreparedStatement newAccStmt = newConn.prepareStatement(newAccSql))
 		{
 			for (LegacyAccount oldAcc : oldAccounts.values())
@@ -244,6 +242,8 @@ public class DatabaseMigrator {
 
 				String acc_role = roles.get(oldAcc.role_id);
 				newAccStmt.setString(6, acc_role);
+				
+				newAccStmt.setString(7, oldAcc.ssn);
 
 				newAccStmt.execute();
 			}

@@ -8,8 +8,7 @@ package view;
 import java.util.List;
 
 /**
- *
- * @author Simon Ciesluk
+ * DTO in the form of an interface to the application form.
  */
 public interface ApplicationFormDTO {
 	public List<AvailabilityForm> getAvailabilities();

@@ -28,8 +28,7 @@ public class CompetenceProfile implements Serializable {
 	private long id;
 
 	@NotNull
-	@OneToOne(fetch = FetchType.LAZY, optional = false,
-			cascade = { CascadeType.PERSIST, CascadeType.REFRESH })
+	@OneToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "COMP_ID")
 	private Competence competence;
 	
@@ -38,7 +37,7 @@ public class CompetenceProfile implements Serializable {
 	private BigDecimal yearsOfExperience;
 	
 	@NotNull
-	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.ALL }, optional = false)
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "APPL_ID")
 	private Application application;
 	

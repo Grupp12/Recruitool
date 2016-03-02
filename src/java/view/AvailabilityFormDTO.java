@@ -6,8 +6,7 @@
 package view;
 
 /**
- *
- * @author Simon Ciesluk
+ * DTO in the form of an interface to the availability form.
  */
 public interface AvailabilityFormDTO {
 	public String getFrom();

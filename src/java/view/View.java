@@ -7,11 +7,13 @@ import java.io.Serializable;
 import javax.ejb.EJB;
 import integration.EntityExistsException;
 import java.text.ParseException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletResponse;
 import model.Account;
+import model.Competence;
 
 /**
  * View class to be used by JSF. Handles basic view logic and calls the 
@@ -64,15 +66,10 @@ public class View implements Serializable {
 			account = controller.register(registerForm);
 			result = "submitapplication.xhtml?faces-redirect=true";
 			
-			
+			formMessage = "Your account has been created!";
 			
 			// Reset the form
 			registerForm = new RegisterForm();
-			
-			formMessage = "Your account has been created!";
-			
-			HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-			response.sendRedirect(result);
 		} catch (Throwable ex) {
 			result = handleException(ex);
 		}
@@ -109,6 +106,10 @@ public class View implements Serializable {
 		}
 	}
 	
+	/**
+	 * Create a new application with the data currently in the application form 
+	 * and the account that is logged in.
+	 */
 	public void submitApplication() {
 		try {
 			controller.submitApplication(applicationForm, account);
@@ -118,6 +119,10 @@ public class View implements Serializable {
 			formMessage = "Wrong date format";
 		}
 		applicationForm = new ApplicationForm();
+	}
+	
+	public List<Competence> getAllCompetences() {
+		return controller.getAllCompetences();
 	}
 	
 	private String handleException (Throwable ex) {

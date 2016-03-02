@@ -39,6 +39,7 @@ public class Controller {
 	 * Registers a new {@code Account}.
 	 *
 	 * @param registerForm the new account info.
+	 * @return the created account.
 	 * 
 	 * @throws ValidationException if account data is invalid.
 	 * @throws EntityExistsException if account already exists.
@@ -51,6 +52,13 @@ public class Controller {
 		return acc;
 	}
 	
+	/**
+	 * Create a new application.
+	 * 
+	 * @param applicationForm the application info.
+	 * @param account the account associated with the application. 
+	 * @throws ParseException if wrong date format.
+	 */
 	public void submitApplication(ApplicationFormDTO applicationForm, Account account) throws ParseException {
 		List<CompetenceProfile> competences = new ArrayList();
 		List<Availability> availabilities = new ArrayList();
@@ -69,5 +77,9 @@ public class Controller {
 		
 		Application appl = account.createApplication(competences, availabilities);
 		applicationDao.persistApplication(appl);
+	}
+	
+	public List<Competence> getAllCompetences() {
+		return applicationDao.getAllCompetences();
 	}
 }
