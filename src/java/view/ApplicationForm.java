@@ -23,7 +23,7 @@ public final class ApplicationForm implements ApplicationFormDTO {
 		return compForm;
 	}
 	
-	public void addCompetenceProfile() {
+	public void submitCompetenceForm() {
 		competences.add(compForm);
 		compForm = new CompetenceProfileForm();
 	}
@@ -32,7 +32,7 @@ public final class ApplicationForm implements ApplicationFormDTO {
 		return availForm;
 	}
 	
-	public void addAvailability() {
+	public void submitAvailabilityForm() {
 		availabilities.add(availForm);
 		availForm = new AvailabilityForm();
 	}
