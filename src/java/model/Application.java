@@ -38,13 +38,13 @@ public class Application implements Serializable {
 	private Account account;
 
 	@NotNull
-	@OneToMany(mappedBy = "application",
-			fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
+	@OneToMany(mappedBy = "application", fetch = FetchType.LAZY,
+			cascade = { CascadeType.ALL })
 	private List<CompetenceProfile> competences;
 	
 	@NotNull
-	@OneToMany(mappedBy = "application",
-			fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
+	@OneToMany(mappedBy = "application", fetch = FetchType.LAZY,
+			cascade = { CascadeType.ALL })
 	private List<Availability> availabilities;
 	
 	@NotNull

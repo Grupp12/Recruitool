@@ -20,7 +20,7 @@ public class ApplicationDao {
 	@PostConstruct
 	private void init() {
 		String[] competenceNames = {
-			"Java", "C++"
+			"Java", "C++", "PHP", "HTML", "CSS", "JS"
 		};
 		
 		for (String compName : competenceNames) {

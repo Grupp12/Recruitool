@@ -7,9 +7,11 @@ import java.io.Serializable;
 import javax.ejb.EJB;
 import integration.EntityExistsException;
 import java.text.ParseException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Account;
+import model.Competence;
 
 /**
  * View class to be used by JSF. Handles basic view logic and calls the 
@@ -62,10 +64,10 @@ public class View implements Serializable {
 			account = controller.register(registerForm);
 			result = "submitapplication";
 			
+			formMessage = "Your account has been created!";
+			
 			// Reset the form
 			registerForm = new RegisterForm();
-			
-			formMessage = "Your account has been created!";
 		} catch (Throwable ex) {
 			result = handleException(ex);
 		}
@@ -115,6 +117,10 @@ public class View implements Serializable {
 			formMessage = "Wrong date format";
 		}
 		applicationForm = new ApplicationForm();
+	}
+	
+	public List<Competence> getAllCompetences() {
+		return controller.getAllCompetences();
 	}
 	
 	private String handleException (Throwable ex) {
