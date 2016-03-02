@@ -15,44 +15,46 @@
 						<p class="applicationInput">
 							<p>From (yyyy-MM-dd)</p>
 
-							<h:inputText id="from" value="#{myView.af.from}"/>
+							<h:inputText id="from"
+										 value="#{myView.applicationForm.availabilityForm.from}"/>
 							<p><h:messages class="inputError" for="from" /></p>
 						</p>
 						<p class="applicationInput">
 							<p>To (yyyy-MM-dd)</p>
-							<h:inputText id="to" value="#{myView.af.to}"/>
+							<h:inputText id="to"
+										 value="#{myView.applicationForm.availabilityForm.to}"/>
 							<p><h:messages class="inputError" for="to" /></p>
 						</p>
 						<p>
-							<h:commandButton value="Add availability" action="#{myView.addAvailability()}" />
+							<h:commandButton value="Add availability"
+											 action="#{myView.applicationForm.addAvailability()}" />
 						</p>
 						<p class="applicationInput">
 							<p>Competence</p>
-							<h:selectOneMenu value="#{myView.cpf.competence}">
+							<h:selectOneMenu id="competence"
+											 value="#{myView.applicationForm.competenceForm.competence}">
 								<f:selectItems value="#{myView.allCompetences}" var="c"
 											   itemLabel="#{c.name}" itemValue="#{c.name}" />
 							</h:selectOneMenu>
-							<!--<h:inputText id="competence" value="#{myView.cpf.competence}"/>-->
 							<p><h:messages class="inputError" for="competence" /></p>
 						</p>
 						<p class="applicationInput">
 							<p>Years of experience</p>
-							<h:inputText id="yoe" value="#{myView.cpf.yearsOfExperience}"/>
+							<h:inputText id="yoe"
+										 value="#{myView.applicationForm.competenceForm.yearsOfExperience}"/>
 							<p><h:messages class="inputError" for="yoe" /></p>
 						</p>
 						<p>
-							<h:commandButton value="Add competence" action="#{myView.addCompetenceProfile()}" />
+							<h:commandButton value="Add competence"
+											 action="#{myView.applicationForm.addCompetenceProfile()}" />
 						</p>
 						<p>
 							<h:commandButton value="Submit application" action="#{myView.submitApplication()}" />
 						</p>
-						<h:outputLabel for="submitMessage" rendered="#{myView.formMessage != null}"/>
-						<h:outputText id="submitMessage" value="#{myView.formMessage}" style="white-space: pre-wrap"/>
+						<h:outputText style="white-space: pre-wrap" value="#{myView.applicationStatus}"/>
 					</h:form>
-					
 				</div>
 			</ui:define>
 		</ui:composition>
-
 	</h:body>
 </html>

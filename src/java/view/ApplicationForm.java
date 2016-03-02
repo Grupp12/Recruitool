@@ -6,40 +6,44 @@ import java.util.List;
 /**
  * Holds the application form values.
  */
-public final class ApplicationForm implements ApplicationFormDTO{
+public final class ApplicationForm implements ApplicationFormDTO {
 	
-	private List<AvailabilityForm> availabilities;
-	private List<CompetenceProfileForm> competences;
+	private CompetenceProfileForm compForm = new CompetenceProfileForm();
+	private AvailabilityForm availForm = new AvailabilityForm();
+	
+	private List<AvailabilityFormDTO> availabilities;
+	private List<CompetenceProfileFormDTO> competences;
 	
 	ApplicationForm() {
 		this.availabilities = new ArrayList();
 		this.competences = new ArrayList();
 	}
-	
-	public void addCompetenceProfileForm(CompetenceProfileForm cpf) {
-		competences.add(cpf);
+
+	public CompetenceProfileForm getCompetenceForm() {
+		return compForm;
 	}
 	
-	public void addAvailabilityForm(AvailabilityForm af) {
-		availabilities.add(af);
+	public void addCompetenceProfile() {
+		competences.add(compForm);
+		compForm = new CompetenceProfileForm();
+	}
+	
+	public AvailabilityForm getAvailabilityForm() {
+		return availForm;
+	}
+	
+	public void addAvailability() {
+		availabilities.add(availForm);
+		availForm = new AvailabilityForm();
 	}
 
 	@Override
-	public List<AvailabilityForm> getAvailabilities() {
+	public List<AvailabilityFormDTO> getAvailabilities() {
 		return availabilities;
 	}
 
 	@Override
-	public List<CompetenceProfileForm> getCompetences() {
+	public List<CompetenceProfileFormDTO> getCompetences() {
 		return competences;
 	}
-
-	public void setAvailabilities(List<AvailabilityForm> availabilities) {
-		this.availabilities = availabilities;
-	}
-
-	public void setCompetences(List<CompetenceProfileForm> competences) {
-		this.competences = competences;
-	}
-	
 }

@@ -3,7 +3,7 @@ package view;
 /**
  * Holds the availability form values.
  */
-public class AvailabilityForm implements AvailabilityFormDTO{
+public class AvailabilityForm implements AvailabilityFormDTO {
 	private String from;
 	private String to;
 
@@ -24,5 +24,4 @@ public class AvailabilityForm implements AvailabilityFormDTO{
 	public void setTo(String to) {
 		this.to = to;
 	}
-	
 }

@@ -46,15 +46,7 @@ public class View implements Serializable {
 	public RegisterForm getRegisterForm() {
 		return registerForm;
 	}
-
-	public CompetenceProfileForm getCpf() {
-		return cpf;
-	}
-
-	public AvailabilityForm getAf() {
-		return af;
-	}
-
+	
 	/**
 	 * Registers a new account with the data currently in the register form.
 	 *
@@ -72,40 +64,27 @@ public class View implements Serializable {
 
 			// Reset the form
 			registerForm = new RegisterForm();
-		} catch (Throwable ex) {
+		}
+		catch (Throwable ex) {
 			result = handleException(ex);
 		}
 		return result;
 	}
-
-	/**
-	 * Add a new competence profile to the application.
-	 */
-	public void addCompetenceProfile() {
-		applicationForm.addCompetenceProfileForm(cpf);
-		// Reset the form
-		cpf = new CompetenceProfileForm();
-		showApplicationStatus();
+	
+	public ApplicationForm getApplicationForm() {
+		return applicationForm;
 	}
-
-	/**
-	 * Add a new availability to the application.
-	 */
-	public void addAvailability() {
-		applicationForm.addAvailabilityForm(af);
-		// Reset the form
-		af = new AvailabilityForm();
-		showApplicationStatus();
-	}
-
-	private void showApplicationStatus() {
-		formMessage = "";
-		for (AvailabilityForm avF : applicationForm.getAvailabilities()) {
-			formMessage += "Availability: " + avF.getFrom() + " - " + avF.getTo() + "\n";
+	
+	public String getApplicationStatus() {
+		String applStatus = "";
+		for (AvailabilityFormDTO avF : applicationForm.getAvailabilities()){
+			applStatus += "Availability: " + avF.getFrom() + " - " + avF.getTo() + "\n";
 		}
-		for (CompetenceProfileForm compF : applicationForm.getCompetences()) {
-			formMessage += "CompetenceProfile: " + compF.getCompetence() + ", years of experience: " + compF.getYearsOfExperience() + "\n";
+		for (CompetenceProfileFormDTO compF : applicationForm.getCompetences()){
+			applStatus += "CompetenceProfile: " + compF.getCompetence() + ", years of experience: " + compF.getYearsOfExperience() + "\n";
 		}
+		
+		return applStatus;
 	}
 
 	/**
@@ -117,7 +96,8 @@ public class View implements Serializable {
 			tryLogin();
 			controller.submitApplication(applicationForm, account);
 			formMessage = "Application submitted";
-		} catch (ParseException ex) {
+		}
+		catch (ParseException ex) {
 			Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
 			formMessage = "Wrong date format";
 		} catch (AuthenticationException ex) {
