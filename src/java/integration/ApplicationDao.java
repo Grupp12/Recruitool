@@ -3,6 +3,8 @@ package integration;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import static javax.ejb.TransactionAttributeType.MANDATORY;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -12,6 +14,7 @@ import model.Competence;
 /**
  * DAO for handling Applications in the database using JPA
  */
+@TransactionAttribute(MANDATORY)
 @Stateless
 public class ApplicationDao {
 	@PersistenceContext(unitName = "RecruitoolPU")

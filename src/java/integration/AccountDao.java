@@ -9,6 +9,8 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import model.ValidationException;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import static javax.ejb.TransactionAttributeType.MANDATORY;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
@@ -22,22 +24,12 @@ import model.Account;
 /**
  * DAO for handling Accounts in the database using JPA
  */
+@TransactionAttribute(MANDATORY)
 @Stateless
 public class AccountDao {
 
 	@PersistenceContext(unitName = "RecruitoolPU")
 	private EntityManager em;
-
-	private Connection derbyConn;
-
-	@PostConstruct
-	private void init() {
-		try {
-			derbyConn = DriverManager.getConnection("jdbc:derby://localhost:1527/recruitool;user=root;password=1234");
-		} catch (SQLException ex) {
-			Logger.getLogger(AccountDao.class.getName()).log(Level.SEVERE, null, ex);
-		}
-	}
 
 	/**
 	 * Persist account to database through JPA
