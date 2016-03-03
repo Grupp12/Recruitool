@@ -43,7 +43,7 @@ public class View implements Serializable {
 	/**
 	 * Registers a new account with the data currently in the register form.
 	 *
-	 * @return string(result) with value unhandledError if error occurred else a
+	 * @return the result with value unhandledError if error occurred else a
 	 * empty string. Error page will be shown if return value is unhandledError.
 	 */
 	public String register() {
