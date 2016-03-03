@@ -28,7 +28,6 @@ public final class RegisterForm implements RegisterFormDTO {
 	@NotNull
 	@Size(min = 1, message = "Password can not be empty")
 	private String password;
-	
 
 	@Override
 	public String getFirstName() {

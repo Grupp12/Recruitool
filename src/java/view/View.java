@@ -6,7 +6,6 @@ import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import javax.ejb.EJB;
 import integration.EntityExistsException;
-import java.security.Principal;
 import java.text.ParseException;
 import java.util.List;
 import java.util.logging.Level;
@@ -29,13 +28,7 @@ public class View implements Serializable {
 	private Account account;
 
 	private RegisterForm registerForm = new RegisterForm();
-
 	private ApplicationForm applicationForm = new ApplicationForm();
-
-	private CompetenceProfileForm cpf = new CompetenceProfileForm();
-
-	private AvailabilityForm af = new AvailabilityForm();
-
 	private String formMessage;
 
 	/**
@@ -71,10 +64,18 @@ public class View implements Serializable {
 		return result;
 	}
 	
+	/**
+	 * Returns the object representing the application form.
+	 *
+	 * @return the application form object.
+	 */
 	public ApplicationForm getApplicationForm() {
 		return applicationForm;
 	}
 	
+	/**
+	 * NOTE: TEMPORARY!
+	 */
 	public String getApplicationStatus() {
 		String applStatus = "";
 		for (AvailabilityFormDTO avF : applicationForm.getAvailabilities()){
@@ -107,10 +108,18 @@ public class View implements Serializable {
 		applicationForm = new ApplicationForm();
 	}
 
+	/**
+	 * Retrieves all available competences.
+	 * 
+	 * @return a list of all competences.
+	 */
 	public List<Competence> getAllCompetences() {
 		return controller.getAllCompetences();
 	}
 
+	/**
+	 * NOTE: TEMPORARY!
+	 */
 	private String handleException(Throwable ex) {
 		String errorMessage = "";
 		if (ex instanceof EntityExistsException) {
@@ -130,7 +139,7 @@ public class View implements Serializable {
 	public String getFormMessage() {
 		return formMessage;
 	}
-
+	
 	private void tryLogin() throws AuthenticationException {
 		if (account == null) {
 			FacesContext facesContext = FacesContext.getCurrentInstance();

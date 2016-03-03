@@ -23,6 +23,9 @@ public final class ApplicationForm implements ApplicationFormDTO {
 		return compForm;
 	}
 	
+	/**
+	 * Submits the data in the competence form and then resets the form.
+	 */
 	public void submitCompetenceForm() {
 		competences.add(compForm);
 		compForm = new CompetenceProfileForm();
@@ -32,6 +35,9 @@ public final class ApplicationForm implements ApplicationFormDTO {
 		return availForm;
 	}
 	
+	/**
+	 * Submits the data in the availability form and then resets the form.
+	 */
 	public void submitAvailabilityForm() {
 		availabilities.add(availForm);
 		availForm = new AvailabilityForm();
