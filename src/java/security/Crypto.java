@@ -25,10 +25,6 @@ public class Crypto {
 	private static final int KEY_LENGTH = 1024;
 	private static final int SALT_LENGTH = 64;
 	
-	public static void main(String[] args) {
-		simpleHash("qwerty");
-	}
-	
 	/**
 	 * Hashing with SHA-256
 	 * 
@@ -41,7 +37,6 @@ public class Crypto {
 			
 			byte[] digest = md.digest();
 			String hash = String.format("%064x", new java.math.BigInteger(1, digest));
-			System.out.println("simple hash len = " + hash.length());
 			return hash;
 			
 		} catch (UnsupportedEncodingException | NoSuchAlgorithmException ex) {
