@@ -53,7 +53,7 @@ public class View implements Serializable {
 		String result;
 		formMessage = null;
 		try {
-			account = controller.register(registerForm);
+			controller.register(registerForm);
 			result = "submitapplication.xhtml?faces-redirect=true";
 
 			formMessage = "Your account has been created!";
@@ -111,6 +111,13 @@ public class View implements Serializable {
 	}
 
 	public String downloadApplicationPDF() {
+		try {
+			tryLogin();
+		} catch (AuthenticationException ex) {
+			Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+			return handleException(ex);
+		}
+		
 		try (ApplicationPDF applPdf = new ApplicationPDF(account.getApplication()))
 		{
 			FacesContext fc = FacesContext.getCurrentInstance();
