@@ -6,13 +6,16 @@ import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import javax.ejb.EJB;
 import integration.EntityExistsException;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import model.Account;
 import model.Competence;
+import model.pdf.ApplicationPDF;
 
 /**
  * View class to be used by JSF. Handles basic view logic and calls the
@@ -50,7 +53,7 @@ public class View implements Serializable {
 		String result;
 		formMessage = null;
 		try {
-			controller.register(registerForm);
+			account = controller.register(registerForm);
 			result = "submitapplication.xhtml?faces-redirect=true";
 
 			formMessage = "Your account has been created!";
@@ -108,6 +111,39 @@ public class View implements Serializable {
 		applicationForm = new ApplicationForm();
 	}
 
+	public String downloadApplicationPDF() {
+		try (ApplicationPDF applPdf = new ApplicationPDF(account.getApplication()))
+		{
+			FacesContext fc = FacesContext.getCurrentInstance();
+			ExternalContext ec = fc.getExternalContext();
+
+			/* Some JSF component library or some Filter might have set some
+			 *headers in the buffer beforehand. We want to get rid of them,
+			 * else it may collide.
+			 */
+			ec.responseReset();
+			// Set content type to PDF file
+			ec.setResponseContentType("application/pdf");
+			// Specify filename
+			ec.setResponseHeader("Content-Disposition", "attachment; filename=\"application-"
+					+ account.getFirstName() + "_" + account.getLastName()
+					+ "-" + account.getApplication().getTimeOfRegistration().toString().replace(':', '_')
+					+ ".pdf\"");
+
+			// Write pdf to response stream
+			applPdf.save(ec.getResponseOutputStream());
+
+			// Send response, otherwise JSF will do stupid stuff
+			fc.responseComplete();
+		}
+		catch (IOException ex) {
+			Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+			return handleException(ex);
+		}
+		
+		return "";
+	}
+	
 	/**
 	 * Retrieves all available competences.
 	 * 
