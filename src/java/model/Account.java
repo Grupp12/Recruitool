@@ -24,9 +24,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import security.Crypto;
 import view.ApplicationFormDTO;
-import view.AvailabilityForm;
 import view.AvailabilityFormDTO;
-import view.CompetenceProfileForm;
 import view.CompetenceProfileFormDTO;
 import view.RegisterFormDTO;
 
@@ -72,7 +70,7 @@ public class Account implements Serializable {
 	@Column(name = "SSN")
 	private String ssn;
 	
-	@OneToOne(fetch = FetchType.LAZY, /*cascade = { CascadeType.ALL },*/ optional = true,
+	@OneToOne(fetch = FetchType.LAZY, optional = true,
 			mappedBy = "account", targetEntity = Application.class)
 	private Application application;
 	
@@ -97,14 +95,14 @@ public class Account implements Serializable {
 	}
 
 	/**
-	 * Creates and persists a new application for this account
+	 * Creates and persists a new application for this account.
+	 * 
 	 * @param applicationForm
-	 * @return
+	 * @param applicationDao
+	 * 
 	 * @throws ParseException 
 	 */
 	public void createApplication(ApplicationFormDTO applicationForm, ApplicationDao applicationDao) throws ParseException {
-		Timestamp currentTime = new Timestamp(System.currentTimeMillis());
-		
 		List<CompetenceProfile> competences = new ArrayList();
 		List<Availability> availabilities = new ArrayList();
 		
@@ -122,7 +120,7 @@ public class Account implements Serializable {
 		application = new Application(this);
 		application.setAvailabilities(availabilities);
 		application.setCompetences(competences);
-		application.setTimeOfRegistration(new Timestamp(System.currentTimeMillis()));
+		application.setTimeOfRegistration(new SimpleTimestamp());
 		applicationDao.persistApplication(application);
 	}
 	
@@ -131,7 +129,7 @@ public class Account implements Serializable {
 	}
 	
 	public String getLastName() {
-		return firstName;
+		return lastName;
 	}
 	
 	public String getEmail() {

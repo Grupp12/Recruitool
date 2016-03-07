@@ -1,8 +1,6 @@
 package model;
 
-import model.Account;
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -49,7 +47,7 @@ public class Application implements Serializable {
 	
 	@NotNull
 	@Column(name = "TIME_OF_REG")
-	private Timestamp timeOfRegistration;
+	private SimpleTimestamp timeOfRegistration;
 	
 	@NotNull
 	@Column(name = "APPL_STATUS")
@@ -73,6 +71,10 @@ public class Application implements Serializable {
 		status = ApplicationStatus.SUBMITTED;
 	}
 	
+	public Account getAccount() {
+		return account;
+	}
+	
 	public void setCompetences(List<CompetenceProfile> competences) {
 		this.competences = competences;
 		for (CompetenceProfile competence : this.competences) {
@@ -93,10 +95,10 @@ public class Application implements Serializable {
 		return availabilities;
 	}
 	
-	public void setTimeOfRegistration(Timestamp time) {
+	public void setTimeOfRegistration(SimpleTimestamp time) {
 		this.timeOfRegistration = time;
 	}
-	public Timestamp getTimeOfRegistration() {
+	public SimpleTimestamp getTimeOfRegistration() {
 		return timeOfRegistration;
 	}
 	

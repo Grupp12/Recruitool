@@ -11,14 +11,9 @@ public final class ApplicationForm implements ApplicationFormDTO {
 	private CompetenceProfileForm compForm = new CompetenceProfileForm();
 	private AvailabilityForm availForm = new AvailabilityForm();
 	
-	private List<AvailabilityFormDTO> availabilities;
-	private List<CompetenceProfileFormDTO> competences;
+	private final List<AvailabilityFormDTO> availabilities = new ArrayList<>();
+	private final List<CompetenceProfileFormDTO> competences = new ArrayList<>();
 	
-	ApplicationForm() {
-		this.availabilities = new ArrayList();
-		this.competences = new ArrayList();
-	}
-
 	public CompetenceProfileForm getCompetenceForm() {
 		return compForm;
 	}

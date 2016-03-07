@@ -1,7 +1,6 @@
 package model;
 
 import java.io.Serializable;
-import java.sql.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,11 +27,11 @@ public class Availability implements Serializable {
 	
 	@NotNull
 	@Column(name = "FROM_DATE")
-	private Date from;
+	private SimpleDate from;
 	
 	@NotNull
 	@Column(name = "TO_DATE")
-	private Date to;
+	private SimpleDate to;
 	
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.ALL }, optional = false)
@@ -49,16 +48,16 @@ public class Availability implements Serializable {
 	 * @param from
 	 * @param to 
 	 */
-	public Availability(Date from, Date to) {
+	public Availability(SimpleDate from, SimpleDate to) {
 		this.from = from;
 		this.to = to;
 	}
 	
-	public Date getFrom() {
+	public SimpleDate getFrom() {
 		return from;
 	}
 	
-	public Date getTo() {
+	public SimpleDate getTo() {
 		return to;
 	}
 	
@@ -92,19 +91,6 @@ public class Availability implements Serializable {
 	 */
 	@Override
 	public String toString() {
-		/*class ConvertToDateString {
-			String convert(Date date) {
-				Calendar cal = Calendar.getInstance();
-				cal.setTimeInMillis(date.getTime());
-				
-				return String.format("%04d-%02d-%02d",
-						cal.get(Calendar.YEAR),
-						cal.get(Calendar.MONTH) + 1,
-						cal.get(Calendar.DAY_OF_MONTH));
-			}
-		}
-		ConvertToDateString converter = new ConvertToDateString();*/
-		
 		return String.format("Availability[ from=%s, to=%s ]", from, to);
 	}
 	
