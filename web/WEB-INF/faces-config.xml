@@ -5,9 +5,8 @@
 			  xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
 	
 	<navigation-rule>
-		<from-view-id>index.xhtml</from-view-id>
+		<from-view-id>*</from-view-id>
 		<navigation-case>
-			<from-action>#{cc.attrs.registerAction}</from-action>
 			<from-outcome>unhandledError</from-outcome>
 			<to-view-id>error.xhtml</to-view-id>
 		</navigation-case>

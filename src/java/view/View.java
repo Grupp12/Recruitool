@@ -92,20 +92,19 @@ public class View implements Serializable {
 	 * Create a new application with the data currently in the application form
 	 * and the account that is logged in.
 	 */
-	public void submitApplication() {
+	public String submitApplication() {
+		String result = "";
 		try {
 			tryLogin();
 			controller.submitApplication(applicationForm, account);
 			formMessage = "Application submitted";
+			applicationForm = new ApplicationForm();
 		}
-		catch (ParseException ex) {
-			Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
-			formMessage = "Wrong date format";
-		} catch (AuthenticationException ex) {
-			Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
-			formMessage = "You are not logged in!";
+		catch (Throwable ex) {
+			result = handleException(ex);
 		}
-		applicationForm = new ApplicationForm();
+		
+		return result;
 	}
 
 	/**
@@ -124,7 +123,14 @@ public class View implements Serializable {
 		String errorMessage = "";
 		if (ex instanceof EntityExistsException) {
 			formMessage = ex.getMessage();
-		} else {
+		}
+		else if(ex instanceof AuthenticationException) {
+			formMessage = "You are not logged in!";
+		}
+		else if(ex instanceof ParseException) {
+			formMessage = "Wrong date format";
+		}
+		else {
 			errorMessage = "unhandledError";
 		}
 

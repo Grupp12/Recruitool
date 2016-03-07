@@ -38,7 +38,6 @@
     <login-config>
         <auth-method>FORM</auth-method>
         <realm-name>myrealm</realm-name>
-        <!-- need to create realm -->
         <form-login-config>
             <form-login-page> 				/faces/login.xhtml 			</form-login-page>
             <form-error-page>/faces/login_failed.xhtml</form-error-page>
