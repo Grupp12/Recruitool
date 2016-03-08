@@ -3,7 +3,6 @@ package model;
 import integration.ApplicationDao;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +12,8 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.validation.ConstraintViolation;
@@ -35,6 +36,11 @@ import view.RegisterFormDTO;
 public class Account implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ID")
+	private long id;
+	
 	@NotNull
 	@Size(min = 1, message = "First Name can not be empty")
 	@Column(name = "FIRSTNAME")
@@ -52,7 +58,6 @@ public class Account implements Serializable {
 	@Column(name = "EMAIL")
 	private String email;
 
-	@Id
 	@NotNull
 	@Size(min = 1, message = "Username can not be empty")
 	@Column(name = "USERNAME")
@@ -110,17 +115,18 @@ public class Account implements Serializable {
 			availabilities.add(new Availability(new SimpleDate(avF.getFrom()), new SimpleDate(avF.getTo())));
 		}
 		for (CompetenceProfileFormDTO compF : applicationForm.getCompetences()){
-			double dYoe = Double.parseDouble(compF.getYearsOfExperience());
-			BigDecimal yoe = BigDecimal.valueOf(dYoe);
+			BigDecimal yoe = new BigDecimal(compF.getYearsOfExperience());
 			
 			Competence comp = applicationDao.getCompetence(compF.getCompetence());
 			
 			competences.add(new CompetenceProfile(comp, yoe));
 		}
+		
 		application = new Application(this);
 		application.setAvailabilities(availabilities);
 		application.setCompetences(competences);
 		application.setTimeOfRegistration(new SimpleTimestamp());
+		
 		applicationDao.persistApplication(application);
 	}
 	
