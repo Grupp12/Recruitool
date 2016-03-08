@@ -1,7 +1,6 @@
 package model;
 
 import java.sql.Timestamp;
-import java.util.Calendar;
 
 public class SimpleTimestamp extends Timestamp {
 	public SimpleTimestamp() {
@@ -10,16 +9,10 @@ public class SimpleTimestamp extends Timestamp {
 	
 	@Override
 	public String toString() {
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(this);
+		String timeStr = super.toString();
 		
-		String timeStr = "";
-		timeStr += cal.get(Calendar.YEAR);
-		timeStr += String.format("-%02d", cal.get(Calendar.MONTH + 1));
-		timeStr += String.format("-%02d", cal.get(Calendar.DAY_OF_MONTH));
-		timeStr += String.format(":%02d", cal.get(Calendar.HOUR_OF_DAY));
-		timeStr += String.format(":%02d", cal.get(Calendar.MINUTE));
-		timeStr += String.format(":%02d", cal.get(Calendar.SECOND));
+		// Remove milliseconds
+		timeStr = timeStr.substring(0, timeStr.lastIndexOf('.'));
 		
 		return timeStr;
 	}
