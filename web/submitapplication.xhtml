@@ -62,7 +62,12 @@
 					<h:form>
 						<h:commandButton value="Download application" action="#{myView.downloadApplicationPDF()}" />
 					</h:form>
-					<h:outputText style="white-space: pre-wrap" value="#{myView.applicationStatus}"/>
+					<p>
+						<h:outputText style="white-space: pre-wrap" value="#{myView.formMessage}"/>
+					</p>
+					<p>
+						<h:outputText style="white-space: pre-wrap" value="#{myView.applicationStatus}"/>
+					</p>
 				</div>
 			</ui:define>
 		</ui:composition>

@@ -139,10 +139,9 @@ public class View implements Serializable {
 			// Write pdf to response stream
 			applPdf.save(ec.getResponseOutputStream());
 
-			// Send response, otherwise JSF will do stupid stuff
 			fc.responseComplete();
 		}
-		catch (IOException ex) {
+		catch (Throwable ex) {
 			Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
 			return handleException(ex);
 		}
@@ -158,10 +157,7 @@ public class View implements Serializable {
 	public List<Competence> getAllCompetences() {
 		return controller.getAllCompetences();
 	}
-
-	/**
-	 * NOTE: TEMPORARY!
-	 */
+	
 	private String handleException(Throwable ex) {
 		String errorMessage = "";
 		if (ex instanceof EntityExistsException) {

@@ -31,7 +31,6 @@ public class Controller {
 	 * Registers a new {@code Account}.
 	 *
 	 * @param registerForm the new account info.
-	 * @return the created account.
 	 *
 	 * @throws ValidationException if account data is invalid.
 	 * @throws EntityExistsException if account already exists.
