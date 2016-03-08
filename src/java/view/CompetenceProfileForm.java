@@ -1,10 +1,17 @@
 package view;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 /**
  * Holds the competence profile form values.
  */
 public class CompetenceProfileForm implements CompetenceProfileFormDTO {
+	@NotNull
+	@Size(min = 1, message = "Competence can not be empty")
 	private String competence;
+	@NotNull
+	@Size(min = 1, message = "Years of experience can not be empty")
 	private String yearsOfExperience;
 
 	@Override

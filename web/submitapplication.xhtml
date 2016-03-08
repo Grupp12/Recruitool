@@ -29,6 +29,8 @@
 							<h:commandButton value="Add availability"
 											 action="#{myView.applicationForm.submitAvailabilityForm()}" />
 						</p>
+					</h:form>
+					<h:form>
 						<p class="applicationInput">
 							<p>Competence</p>
 							<h:selectOneMenu id="competence"
@@ -48,12 +50,19 @@
 							<h:commandButton value="Add competence"
 											 action="#{myView.applicationForm.submitCompetenceForm()}" />
 						</p>
+					</h:form>
+					<h:form>
 						<p>
 							<h:commandButton value="Submit application" action="#{myView.submitApplication()}" />
-							<h:commandButton value="Download application" action="#{myView.downloadApplicationPDF()}" />
-						</p>
-						<h:outputText style="white-space: pre-wrap" value="#{myView.applicationStatus}"/>
+							<h:inputHidden id="test"
+										 value="#{myView.applicationForm.valid}"/>
+							<p><h:messages class="inputError" for="test"/></p>
+						</p>	
 					</h:form>
+					<h:form>
+						<h:commandButton value="Download application" action="#{myView.downloadApplicationPDF()}" />
+					</h:form>
+					<h:outputText style="white-space: pre-wrap" value="#{myView.applicationStatus}"/>
 				</div>
 			</ui:define>
 		</ui:composition>

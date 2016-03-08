@@ -1,10 +1,17 @@
 package view;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 /**
  * Holds the availability form values.
  */
 public class AvailabilityForm implements AvailabilityFormDTO {
+	@NotNull
+	@Size(min = 1, message = "From can not be empty")
 	private String from;
+	@NotNull
+	@Size(min = 1, message = "To can not be empty")
 	private String to;
 
 	@Override
