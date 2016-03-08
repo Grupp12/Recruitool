@@ -141,7 +141,7 @@ public class View implements Serializable {
 
 			fc.responseComplete();
 		}
-		catch (IOException ex) {
+		catch (Throwable ex) {
 			Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
 			return handleException(ex);
 		}
