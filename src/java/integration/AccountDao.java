@@ -1,12 +1,6 @@
 package integration;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
+import java.io.Serializable;
 import model.ValidationException;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -17,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Id;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Table;
+import javax.persistence.TypedQuery;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import model.Account;
@@ -41,10 +36,10 @@ public class AccountDao {
 	 */
 	public void persistAccount(Account acc) throws ValidationException, EntityExistsException {
 		try {
-			Account found = em.find(Account.class, acc.getUsername());
-			if (found != null) {
+			if (getAccount(acc.getUsername()) != null) {
 				throw new EntityExistsException("Account with username '" + acc.getUsername() + "' already exists.");
 			}
+			
 			em.persist(acc);
 			AccountGroups ag = new AccountGroups();
 			ag.username = acc.getUsername();
@@ -65,7 +60,15 @@ public class AccountDao {
 	 * @return 
 	 */
 	public Account getAccount(String username) {
-		return em.find(Account.class, username);
+		TypedQuery<Account> query = em.createQuery("SELECT a FROM Account a " +
+					"WHERE UPPER(a.username) = UPPER(:uname)", Account.class);
+		query.setParameter("uname", username);
+			
+		if (query.getResultList().isEmpty()) {
+			return null;
+		}
+		
+		return query.getResultList().get(0);
 	}
 	
 	/**
@@ -73,7 +76,7 @@ public class AccountDao {
 	 */
 	@Entity
 	@Table(name="ACCOUNT_GROUPS")
-	private static class AccountGroups {
+	private static class AccountGroups implements Serializable {
 		@Id
 		@Column(name="GROUPNAME")
 		public final String groupName = "APPLICANT";
@@ -81,5 +84,4 @@ public class AccountDao {
 		@Column(name="USERNAME")
 		public String username;
 	}
-	
 }
