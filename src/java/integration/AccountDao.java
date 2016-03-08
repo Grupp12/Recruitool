@@ -5,16 +5,21 @@ import model.ValidationException;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import static javax.ejb.TransactionAttributeType.MANDATORY;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Table;
 import javax.persistence.TypedQuery;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import model.Account;
+import model.Application;
 
 /**
  * DAO for handling Accounts in the database using JPA
@@ -40,9 +45,10 @@ public class AccountDao {
 				throw new EntityExistsException("Account with username '" + acc.getUsername() + "' already exists.");
 			}
 			
-			em.persist(acc);
+			//em.persist(acc);
 			AccountGroups ag = new AccountGroups();
 			ag.username = acc.getUsername();
+			ag.acc=acc;
 			em.persist(ag);
 		} catch (ConstraintViolationException ex) {
 			StringBuilder violationsStr = new StringBuilder();
@@ -77,6 +83,11 @@ public class AccountDao {
 	@Entity
 	@Table(name="ACCOUNT_GROUPS")
 	private static class AccountGroups implements Serializable {
+		
+		@JoinColumn(name="ACCOUNT")
+		@OneToOne(fetch = FetchType.LAZY, optional = false, targetEntity = Account.class, cascade = {CascadeType.ALL})
+		public Account acc;
+		
 		@Id
 		@Column(name="GROUPNAME")
 		public final String groupName = "APPLICANT";
