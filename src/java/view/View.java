@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import model.Account;
+import model.AccountDTO;
 import model.Competence;
 import model.pdf.ApplicationPDF;
 
@@ -28,7 +29,7 @@ public class View implements Serializable {
 	@EJB
 	private Controller controller;
 
-	private Account account;
+	private AccountDTO account;
 
 	private RegisterForm registerForm = new RegisterForm();
 	private ApplicationForm applicationForm = new ApplicationForm();
@@ -118,7 +119,7 @@ public class View implements Serializable {
 			return handleException(ex);
 		}
 		
-		try (ApplicationPDF applPdf = new ApplicationPDF(account.getApplication()))
+		try (ApplicationPDF applPdf = controller.getApplicationPDF(account))
 		{
 			FacesContext fc = FacesContext.getCurrentInstance();
 			ExternalContext ec = fc.getExternalContext();
@@ -183,6 +184,15 @@ public class View implements Serializable {
 	 */
 	public String getFormMessage() {
 		return formMessage;
+	}
+	
+	/**
+	 * Returns the current account 
+	 *
+	 * @return the registration message.
+	 */
+	public AccountDTO getAccount() {
+		return account;
 	}
 	
 	private void tryLogin() throws AuthenticationException {

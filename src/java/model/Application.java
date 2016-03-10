@@ -1,5 +1,6 @@
 package model;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,13 +17,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
+import model.pdf.ApplicationPDF;
 
 /**
  * Contains information about one application
  * submitted by an applicant.
  */
 @Entity
-public class Application implements Serializable {
+public class Application implements Serializable, ApplicationDTO {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
@@ -156,4 +158,10 @@ public class Application implements Serializable {
 		output.append(" ]");
 		return output.toString();
 	}
+
+
+	public ApplicationPDF generatePDF() throws IOException {
+		return new ApplicationPDF(this);
+	}
+	
 }

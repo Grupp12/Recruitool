@@ -60,7 +60,7 @@
 						</p>	
 					</h:form>
 					<h:form>
-						<h:commandButton value="Download application" action="#{myView.downloadApplicationPDF()}" />
+						<h:commandButton value="Download application" action="#{myView.downloadApplicationPDF()}" disabled="#{myView.account == null}"/>
 					</h:form>
 					<p>
 						<h:outputText style="white-space: pre-wrap" value="#{myView.formMessage}"/>

@@ -33,7 +33,7 @@ import view.RegisterFormDTO;
  * {@code Account} represents an account in the application.
  */
 @Entity
-public class Account implements Serializable {
+public class Account implements Serializable, AccountDTO {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
@@ -146,12 +146,8 @@ public class Account implements Serializable {
 		return username;
 	}
 	
-	public boolean validatePassword(String password) {
-		return Crypto.validateHash(password, this.password);
-	}
-	
-	public Application getApplication() {
-		return application;
+	public ApplicationDTO getApplication() {
+		return (ApplicationDTO)application;
 	}
 	
 	public Role getRole() {
