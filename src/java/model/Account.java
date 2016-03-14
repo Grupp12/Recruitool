@@ -130,26 +130,32 @@ public class Account implements Serializable, AccountDTO {
 		applicationDao.persistApplication(application);
 	}
 	
+	@Override
 	public String getFirstName() {
 		return firstName;
 	}
 	
+	@Override
 	public String getLastName() {
 		return lastName;
 	}
 	
+	@Override
 	public String getEmail() {
 		return email;
 	}
 	
+	@Override
 	public String getUsername() {
 		return username;
 	}
 	
+	@Override
 	public ApplicationDTO getApplication() {
 		return (ApplicationDTO)application;
 	}
 	
+	@Override
 	public Role getRole() {
 		return role;
 	}
