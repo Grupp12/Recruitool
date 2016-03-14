@@ -26,7 +26,9 @@ public class Crypto {
 	private static final int SALT_LENGTH = 64;
 	
 	/**
-	 * Hashing with SHA-256
+	 * Hashing with SHA-256.
+	 * 
+	 * @param text clear text to hash.
 	 * 
 	 * @return hashed version of input.
 	 */
@@ -50,6 +52,7 @@ public class Crypto {
 	 * Generates a hash from the input clear text.
 	 * 
 	 * @param clear The clear text to hash.
+	 * 
 	 * @return The generated hash.
 	 */
 	public static String generateHash(String clear) {
