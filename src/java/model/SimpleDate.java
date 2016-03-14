@@ -21,6 +21,10 @@ public class SimpleDate extends Date implements Serializable {
 		super(System.currentTimeMillis());
 	}
 	
+	public SimpleDate(long time) {
+		super(time);
+	}
+	
 	/**
 	 * Constructs a new {@code SimpleDate} set to the date sent as a parameter.
 	 * The date must be in the format yyyy-MM-dd.

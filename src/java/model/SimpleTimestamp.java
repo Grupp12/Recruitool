@@ -7,6 +7,10 @@ public class SimpleTimestamp extends Timestamp {
 		super(System.currentTimeMillis());
 	}
 	
+	public SimpleTimestamp(long time) {
+		super(time);
+	}
+	
 	@Override
 	public String toString() {
 		String timeStr = super.toString();

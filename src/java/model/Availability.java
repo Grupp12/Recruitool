@@ -1,6 +1,7 @@
 package model;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -27,11 +29,13 @@ public class Availability implements Serializable {
 	
 	@NotNull
 	@Column(name = "FROM_DATE")
-	private SimpleDate from;
+	@Temporal(javax.persistence.TemporalType.DATE)
+	private Date from;
 	
 	@NotNull
 	@Column(name = "TO_DATE")
-	private SimpleDate to;
+	@Temporal(javax.persistence.TemporalType.DATE)
+	private Date to;
 	
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.ALL }, optional = false)
@@ -54,11 +58,11 @@ public class Availability implements Serializable {
 	}
 	
 	public SimpleDate getFrom() {
-		return from;
+		return new SimpleDate(from.getTime());
 	}
 	
 	public SimpleDate getTo() {
-		return to;
+		return new SimpleDate(to.getTime());
 	}
 	
 	void setApplication(Application appl) {

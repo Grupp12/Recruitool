@@ -2,6 +2,7 @@ package model;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -49,7 +50,7 @@ public class Application implements Serializable, ApplicationDTO {
 	
 	@NotNull
 	@Column(name = "TIME_OF_REG")
-	private SimpleTimestamp timeOfRegistration;
+	private Timestamp timeOfRegistration;
 	
 	@NotNull
 	@Column(name = "APPL_STATUS")
@@ -100,13 +101,15 @@ public class Application implements Serializable, ApplicationDTO {
 	public void setTimeOfRegistration(SimpleTimestamp time) {
 		this.timeOfRegistration = time;
 	}
+	@Override
 	public SimpleTimestamp getTimeOfRegistration() {
-		return timeOfRegistration;
+		return new SimpleTimestamp(timeOfRegistration.getTime());
 	}
 	
 	public void setStatus(ApplicationStatus status) {
 		this.status = status;
 	}
+	@Override
 	public ApplicationStatus getStatus() {
 		return status;
 	}
