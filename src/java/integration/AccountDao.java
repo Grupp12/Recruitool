@@ -19,7 +19,6 @@ import javax.persistence.TypedQuery;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import model.Account;
-import model.Application;
 
 /**
  * DAO for handling Accounts in the database using JPA
