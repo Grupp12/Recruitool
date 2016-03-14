@@ -1,7 +1,6 @@
 package integration;
 
 import java.util.List;
-import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import static javax.ejb.TransactionAttributeType.MANDATORY;
@@ -19,20 +18,11 @@ import model.Competence;
 public class ApplicationDao {
 	@PersistenceContext(unitName = "RecruitoolPU")
 	EntityManager em;
-
-	@PostConstruct
-	private void init() {
-		String[] competenceNames = {
-			"Java", "C++", "PHP", "HTML", "CSS", "JS"
-		};
-		
-		for (String compName : competenceNames) {
-			persistCompetence(new Competence(compName));
-		}
-	}
 	
 	/**
 	 * Persist application to database through JPA
+	 * 
+	 * @param app the application object to persist
 	 */
 	public void persistApplication(Application app) {
 		em.persist(app);
@@ -40,6 +30,8 @@ public class ApplicationDao {
 	
 	/**
 	 * Persist competence to database through JPA
+	 * 
+	 * @param competence the competence object to persist
 	 */
 	public void persistCompetence(Competence competence) {
 		em.persist(competence);
