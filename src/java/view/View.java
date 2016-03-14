@@ -130,9 +130,9 @@ public class View implements Serializable {
 			// Set content type to PDF file
 			ec.setResponseContentType("application/pdf");
 			// Specify filename
-			ec.setResponseHeader("Content-Disposition", "attachment; filename=\"application-"
-					+ account.getFirstName() + "_" + account.getLastName()
-					+ "-" + account.getApplication().getTimeOfRegistration().toString().replace(':', '_').replace(' ', '_')
+			ec.setResponseHeader("Content-Disposition", "attachment; filename=\""
+					+ account.getFirstName() + "-" + account.getLastName()
+					+ "_" + account.getApplication().getTimeOfRegistration().toString().replace(':', '-').replace(' ', '_')
 					+ ".pdf\"");
 
 			// Write pdf to response stream
