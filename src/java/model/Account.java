@@ -108,12 +108,15 @@ public class Account implements Serializable, AccountDTO {
 	 * @throws ParseException 
 	 */
 	public void createApplication(ApplicationFormDTO applicationForm, ApplicationDao applicationDao) throws ParseException {
-		List<CompetenceProfile> competences = new ArrayList();
 		List<Availability> availabilities = new ArrayList();
+		List<CompetenceProfile> competences = new ArrayList();
 		
 		for (AvailabilityFormDTO avF : applicationForm.getAvailabilities()){
 			availabilities.add(new Availability(new SimpleDate(avF.getFrom()), new SimpleDate(avF.getTo())));
 		}
+		if (availabilities.isEmpty())
+			throw new IllegalStateException("No availabilities have been submitted");
+		
 		for (CompetenceProfileFormDTO compF : applicationForm.getCompetences()){
 			BigDecimal yoe = new BigDecimal(compF.getYearsOfExperience());
 			
@@ -121,8 +124,14 @@ public class Account implements Serializable, AccountDTO {
 			
 			competences.add(new CompetenceProfile(comp, yoe));
 		}
+		if (competences.isEmpty())
+			throw new IllegalStateException("No competences have been submitted");
+		
+		if (application != null)
+			applicationDao.removeApplication(application);
 		
 		application = new Application(this);
+		
 		application.setAvailabilities(availabilities);
 		application.setCompetences(competences);
 		application.setTimeOfRegistration(new SimpleTimestamp());
