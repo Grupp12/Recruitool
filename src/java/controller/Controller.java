@@ -65,12 +65,17 @@ public class Controller {
 
 	/**
 	 * @param username
-	 * @return Gets the account with the specified username from the database
+	 * @return Gets the account with the specified username from the database.
 	 */
 	public AccountDTO retrieveAccount(String username) {
 		return accountDao.getAccount(username);
 	}
 	
+	/**
+	 * @param account
+	 * @return ApplicationPDF object for the account's application.
+	 * @throws IOException 
+	 */
 	public ApplicationPDF getApplicationPDF(AccountDTO account) throws IOException {
 		return ((Application)((Account)account).getApplication()).generatePDF();
 	}

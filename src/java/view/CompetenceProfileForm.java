@@ -4,7 +4,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
- * Holds the competence profile form values.
+ * Holds competence profiles for the application submission.
  */
 public class CompetenceProfileForm implements CompetenceProfileFormDTO {
 	@NotNull

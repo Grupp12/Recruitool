@@ -49,7 +49,7 @@ public class Crypto {
 	
 	
 	/**
-	 * Generates a hash from the input clear text.
+	 * Generates a salted hash from the input clear text.
 	 * 
 	 * @param clear The clear text to hash.
 	 * 

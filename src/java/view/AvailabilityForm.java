@@ -4,7 +4,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
- * Holds the availability form values.
+ * Holds availability data for application submission.
  */
 public class AvailabilityForm implements AvailabilityFormDTO {
 	@NotNull

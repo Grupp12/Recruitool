@@ -20,6 +20,11 @@ public class ApplicationPDF implements AutoCloseable {
 	
 	private PDDocument document;
 	
+	/**
+	 * Creates a PDF document from the application object.
+	 * @param appl
+	 * @throws IOException 
+	 */
 	public ApplicationPDF(Application appl) throws IOException {
 		document = new PDDocument();
 		
@@ -73,6 +78,11 @@ public class ApplicationPDF implements AutoCloseable {
 		}
 	}
 	
+	/**
+	 * Saves this document to an output stream.
+	 * @param out
+	 * @throws IOException 
+	 */
 	public void save(OutputStream out) throws IOException {
 		try {
 			document.save(out);
@@ -81,6 +91,10 @@ public class ApplicationPDF implements AutoCloseable {
 		}
 	}
 	
+	/**
+	 * Close this document.
+	 * @throws IOException 
+	 */
 	@Override
 	public void close() throws IOException {
 		document.close();

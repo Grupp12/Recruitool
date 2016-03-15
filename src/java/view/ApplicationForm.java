@@ -5,7 +5,7 @@ import java.util.List;
 import javax.validation.constraints.AssertTrue;
 
 /**
- * Holds the application form values.
+ * Manages the forms used to submit applications.
  */
 public final class ApplicationForm implements ApplicationFormDTO {
 	
@@ -17,6 +17,25 @@ public final class ApplicationForm implements ApplicationFormDTO {
 	
 	@AssertTrue(message = "You have to add atleast one availability and competence")
 	private boolean valid = false;
+	
+	
+	/**
+	 * Builds the string that shows the current status of the ongoing application
+	 * submission. Used by JSF.
+	 * 
+	 * @return application form status string.
+	 */
+	public String getApplicationStatus() {
+		String applStatus = "";
+		for (AvailabilityFormDTO avF : getAvailabilities()){
+			applStatus += "Availability: " + avF.getFrom() + " - " + avF.getTo() + "\n";
+		}
+		for (CompetenceProfileFormDTO compF : getCompetences()){
+			applStatus += "CompetenceProfile: " + compF.getCompetence() + ", years of experience: " + compF.getYearsOfExperience() + "\n";
+		}
+		
+		return applStatus;
+	}
 	
 	public CompetenceProfileForm getCompetenceForm() {
 		return compForm;

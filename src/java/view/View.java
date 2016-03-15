@@ -75,20 +75,6 @@ public class View implements Serializable {
 		return applicationForm;
 	}
 	
-	/**
-	 * NOTE: TEMPORARY!
-	 */
-	public String getApplicationStatus() {
-		String applStatus = "";
-		for (AvailabilityFormDTO avF : applicationForm.getAvailabilities()){
-			applStatus += "Availability: " + avF.getFrom() + " - " + avF.getTo() + "\n";
-		}
-		for (CompetenceProfileFormDTO compF : applicationForm.getCompetences()){
-			applStatus += "CompetenceProfile: " + compF.getCompetence() + ", years of experience: " + compF.getYearsOfExperience() + "\n";
-		}
-		
-		return applStatus;
-	}
 
 	/**
 	 * Create a new application with the data currently in the application form
@@ -109,6 +95,11 @@ public class View implements Serializable {
 		return result;
 	}
 
+	/**
+	 * Gets and puts the logged in account's application PDF in the response
+	 * output stream.
+	 * @return an empty string, the page should not chage.
+	 */
 	public String downloadApplicationPDF() {
 		try {
 			tryLogin();

@@ -61,13 +61,13 @@
 					</h:form>
 					<h:form>
 						<h:commandButton value="Download application" action="#{myView.downloadApplicationPDF()}"
-										 disabled="#{myView.account == null and myView.account.application == null}"/>
+										 disabled="#{myView.account == null or myView.account.application == null}"/>
 					</h:form>
 					<p>
 						<h:outputText style="white-space: pre-wrap" value="#{myView.formMessage}"/>
 					</p>
 					<p>
-						<h:outputText style="white-space: pre-wrap" value="#{myView.applicationStatus}"/>
+						<h:outputText style="white-space: pre-wrap" value="#{myView.applicationForm.applicationStatus}"/>
 					</p>
 				</div>
 			</ui:define>

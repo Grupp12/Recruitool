@@ -11,11 +11,14 @@ public class SimpleTimestamp extends Timestamp {
 		super(time);
 	}
 	
+	/**
+	 * Timestamp without milliseconds.
+	 * @return 
+	 */
 	@Override
 	public String toString() {
 		String timeStr = super.toString();
 		
-		// Remove milliseconds
 		timeStr = timeStr.substring(0, timeStr.lastIndexOf('.'));
 		
 		return timeStr;

@@ -84,7 +84,8 @@ public class AccountDao {
 	private static class AccountGroups implements Serializable {
 		
 		@JoinColumn(name="ACCOUNT")
-		@OneToOne(fetch = FetchType.LAZY, optional = false, targetEntity = Account.class, cascade = {CascadeType.ALL})
+		@OneToOne(fetch = FetchType.LAZY, optional = false, 
+				targetEntity = Account.class, cascade = {CascadeType.ALL})
 		public Account acc;
 		
 		@Id
