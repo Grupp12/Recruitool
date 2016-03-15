@@ -28,6 +28,10 @@ public class ApplicationDao {
 		em.persist(app);
 	}
 	
+	public void removeApplication(Application app) {
+		em.remove(em.merge(app));
+	}
+	
 	/**
 	 * Persist competence to database through JPA
 	 * 
