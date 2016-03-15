@@ -28,6 +28,10 @@ public class ApplicationDao {
 		em.persist(app);
 	}
 	
+	/**
+	 * Removes the application object from the database.
+	 * @param app the application to remove.
+	 */
 	public void removeApplication(Application app) {
 		em.remove(em.merge(app));
 	}
@@ -41,10 +45,19 @@ public class ApplicationDao {
 		em.persist(competence);
 	}
 	
+	/**
+	 * Returns a reference to the requested Competence object.
+	 * @param competenceName the name of the requested competence.
+	 * @return the requested Competence object.
+	 */
 	public Competence getCompetence(String competenceName) {
 		return em.find(Competence.class, competenceName);
 	}
 	
+	/**
+	 * Retrieves all the competences in the database.
+	 * @return a list of all competences.
+	 */
 	public List<Competence> getAllCompetences() {
 		TypedQuery<Competence> competences = em.createQuery("SELECT c FROM Competence c", Competence.class);
 		return competences.getResultList();
