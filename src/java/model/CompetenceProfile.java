@@ -94,7 +94,7 @@ public class CompetenceProfile implements Serializable {
 	 */
 	@Override
 	public String toString() {
-		return String.format("CompetenceProfile[ competence=%s, yearsOfExperience=%d ]",
-				competence, yearsOfExperience);
+		return String.format("CompetenceProfile[ competence=%s, yearsOfExperience=%s ]",
+				competence, yearsOfExperience.toString());
 	}
 }
