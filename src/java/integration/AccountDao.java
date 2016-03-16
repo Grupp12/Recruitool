@@ -44,7 +44,6 @@ public class AccountDao {
 				throw new EntityExistsException("Account with username '" + acc.getUsername() + "' already exists.");
 			}
 			
-			//em.persist(acc);
 			AccountGroups ag = new AccountGroups();
 			ag.username = acc.getUsername();
 			ag.acc=acc;

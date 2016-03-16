@@ -39,7 +39,8 @@ public class Controller {
 	 * @throws ValidationException if account data is invalid.
 	 * @throws EntityExistsException if account already exists.
 	 */
-	public void register(RegisterFormDTO registerForm) throws ValidationException, EntityExistsException {
+	public void register(RegisterFormDTO registerForm) 
+			throws ValidationException, EntityExistsException {
 		Account acc = new Account(registerForm);
 
 		accountDao.persistAccount(acc);
