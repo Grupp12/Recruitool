@@ -61,7 +61,7 @@ public class Application implements Serializable, ApplicationDTO {
 	}
 	
 	/**
-	 * Creates a new {@code Application} submitted by an applicant.
+	 * Creates a new Application submitted by an applicant.
 	 * 
 	 * @param account the applicant's account.
 	 */
@@ -115,6 +115,15 @@ public class Application implements Serializable, ApplicationDTO {
 	}
 	
 	/**
+	 * Creates a new PDF object that holds the data from this application object.
+	 * @return the created Application PDF object.
+	 * @throws IOException if en error occurred when generating the PDF.
+	 */
+	public ApplicationPDF generatePDF() throws IOException {
+		return new ApplicationPDF(this);
+	}
+	
+	/**
 	 * @inheritDoc
 	 */
 	@Override
@@ -161,10 +170,4 @@ public class Application implements Serializable, ApplicationDTO {
 		output.append(" ]");
 		return output.toString();
 	}
-
-
-	public ApplicationPDF generatePDF() throws IOException {
-		return new ApplicationPDF(this);
-	}
-	
 }
