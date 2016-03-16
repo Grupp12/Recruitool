@@ -102,17 +102,21 @@ public class Account implements Serializable, AccountDTO {
 	/**
 	 * Creates and persists a new application for this account.
 	 * 
-	 * @param applicationForm
-	 * @param applicationDao
+	 * @param applicationForm the application form data.
+	 * @param applicationDao the application DAO.
 	 * 
-	 * @throws ParseException 
+	 * @throws ParseException if an availability date doesn't match the format yyyy-MM-dd
 	 */
-	public void createApplication(ApplicationFormDTO applicationForm, ApplicationDao applicationDao) throws ParseException {
+	public void createApplication(ApplicationFormDTO applicationForm,
+			ApplicationDao applicationDao) throws ParseException {
 		List<Availability> availabilities = new ArrayList();
 		List<CompetenceProfile> competences = new ArrayList();
 		
 		for (AvailabilityFormDTO avF : applicationForm.getAvailabilities()){
-			availabilities.add(new Availability(new SimpleDate(avF.getFrom()), new SimpleDate(avF.getTo())));
+			SimpleDate from = new SimpleDate(avF.getFrom());
+			SimpleDate to = new SimpleDate(avF.getTo());
+			
+			availabilities.add(new Availability(from, to));
 		}
 		if (availabilities.isEmpty())
 			throw new IllegalStateException("No availabilities have been submitted");
